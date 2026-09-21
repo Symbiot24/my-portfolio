@@ -1,26 +1,244 @@
 @import "tailwindcss";
 
+/* ============================================
+   CSS CUSTOM PROPERTIES — DESIGN TOKENS
+   ============================================ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* ---- FONTS ---- */
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* ---- DARK THEME (Engineering Console) ---- */
+  --bg-canvas: #0c0e12;
+  --bg-card: #13171f;
+  --bg-card-hover: #181d27;
+  --bg-muted: #1d232f;
+
+  --border-default: #232a38;
+  --border-subtle: #1d232f;
+  --border-hover: #333d52;
+
+  --text-primary: #fafafa;
+  --text-secondary: #e4e4e7;
+  --text-muted: #8f9bb3;
+  --text-subtle: #5d6980;
+
+  --accent-primary: #0284c7;      /* brand-500 */
+  --accent-primary-hover: #0369a1; /* brand-600 */
+  --accent-primary-muted: #075985; /* brand-700 */
+
+  --accent-success: #10b981;      /* emerald-500 */
+  --accent-warning: #f59e0b;      /* amber-500 */
+  --accent-error: #ef4444;        /* red-500 */
+
+  --focus-ring: #0284c7;
+
+  /* ---- SCROLLBAR ---- */
+  --scrollbar-track: #0c0e12;
+  --scrollbar-thumb: #232a38;
+  --scrollbar-thumb-hover: #333d52;
+
+  /* ---- SHADOWS ---- */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
+
+/* ---- LIGHT THEME (Parchment/Editorial) ---- */
+[data-theme="light"] {
+  --bg-canvas: #fbfbf9;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f5f4f0;
+  --bg-muted: #f0ede6;
+
+  --border-default: #e2ded5;
+  --border-subtle: #edeae3;
+  --border-hover: #cac5b9;
+
+  --text-primary: #141416;
+  --text-secondary: #2c2b30;
+  --text-muted: #78756e;
+  --text-subtle: #6c6962;
+
+  --accent-primary: #bc5426;       /* terracotta */
+  --accent-primary-hover: #a3471e;
+  --accent-primary-muted: #9a3412;
+
+  --accent-success: #2e5a44;       /* sage */
+  --accent-warning: #d4973b;
+  --accent-error: #d65d49;
+
+  --focus-ring: #bc5426;
+
+  --scrollbar-track: #f5f4f0;
+  --scrollbar-thumb: #d8d4c9;
+  --scrollbar-thumb-hover: #bc5426;
+}
+
+/* ============================================
+   TAILWIND V4 THEME MAPPING
+   ============================================ */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Colors mapped to CSS variables */
+  --color-bg-canvas: var(--bg-canvas);
+  --color-bg-card: var(--bg-card);
+  --color-bg-card-hover: var(--bg-card-hover);
+  --color-bg-muted: var(--bg-muted);
+
+  --color-border: var(--border-default);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-hover: var(--border-hover);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-text-subtle: var(--text-subtle);
+
+  --color-accent: var(--accent-primary);
+  --color-accent-hover: var(--accent-primary-hover);
+  --color-accent-muted: var(--accent-primary-muted);
+  --color-accent-success: var(--accent-success);
+  --color-accent-warning: var(--accent-warning);
+  --color-accent-error: var(--accent-error);
+
+  --color-focus: var(--focus-ring);
+
+  /* Fonts */
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+
+  /* Shadows */
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+
+  /* Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-full: 9999px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ============================================
+   GLOBAL BASE STYLES
+   ============================================ */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+}
+
+/* Selection */
+::selection {
+  background-color: var(--accent-primary);
+  color: white;
+}
+
+/* Focus visible */
+:focus-visible {
+  outline: none;
+  ring: 2px solid var(--focus-ring);
+  ring-offset: 2px;
+  ring-offset-color: var(--bg-canvas);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* Modal backdrop */
+.modal-open {
+  overflow: hidden;
+}
+
+/* Grid pattern background (hero sections) */
+.bg-grid-pattern {
+  background-image: 
+    linear-gradient(to right, var(--border-subtle) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border-subtle) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Light theme grid pattern */
+[data-theme="light"] .bg-grid-pattern {
+  background-image: 
+    linear-gradient(to right, #e8e5dc55 1px, transparent 1px),
+    linear-gradient(to bottom, #e8e5dc55 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Parchment paper texture (light theme body) */
+[data-theme="light"] body {
+  background-image: radial-gradient(#d8d4c9 0.75px, transparent 0.75px);
+  background-size: 24px 24px;
+}
+
+/* Utility classes for theme-aware components */
+.text-balance {
+  text-wrap: balance;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

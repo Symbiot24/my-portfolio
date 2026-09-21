@@ -1,0 +1,2017 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alex Rivera | Software & Systems Engineer Portfolio</title>
+  <meta name="description" content="Portfolio of Alex Rivera, Final-Year Computer Science Engineering student specializing in full-stack applications, scalable backend systems, and AI/ML integrations.">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+
+  <!-- Google Fonts: Public Sans, JetBrains Mono, & Material Symbols -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+
+  <!-- React 18, React Router v6.3.0, Babel -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/history@5/umd/history.development.js"></script>
+  <script src="https://unpkg.com/react-router@6.3.0/umd/react-router.development.js"></script>
+  <script src="https://unpkg.com/react-router-dom@6.3.0/umd/react-router-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Public Sans"', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            primary: {
+              DEFAULT: '#ec5b13',
+              50: '#fff7ed',
+              100: '#ffedd5',
+              200: '#fed7aa',
+              300: '#fdba74',
+              400: '#fb923c',
+              500: '#ec5b13',
+              600: '#ea580c',
+              700: '#c2410c',
+              800: '#9a3412',
+              900: '#7c2d12',
+            },
+            surface: {
+              canvas: '#0c0e12',
+              card: '#13171f',
+              cardHover: '#181d27',
+              border: '#232a38',
+              borderSubtle: '#1d232f',
+              mutedText: '#8f9bb3',
+              subtleText: '#5d6980',
+              highlight: '#1e2433'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0c0e12;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #232a38;
+      border-radius: 6px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #ec5b13;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+</head>
+<body class="bg-[#0c0e12] text-gray-100 font-sans antialiased selection:bg-primary selection:text-white min-h-screen flex flex-col">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+    const { createRoot } = ReactDOM;
+    const { MemoryRouter, Routes, Route, Link, useNavigate, useLocation } = ReactRouterDOM;
+
+    // Project Case Study Details Data
+    const projectDetails = {
+      nexusrag: {
+        category: "DISTRIBUTED AI & RAG ARCHITECTURE",
+        title: "NexusRAG: Distributed Enterprise Knowledge Agent",
+        subtitle: "High-Throughput Retrieval-Augmented Generation Platform with Citation Verification",
+        github: "https://github.com/alexrivera/nexus-rag-engine",
+        demo: "https://demo-service.com",
+        problem: "Enterprise documentation queries suffered from high hallucinations and slow semantic retrieval across millions of dense technical PDF tokens. Traditional dense embeddings alone fail on exact keyword lookups like part numbers and error codes.",
+        architecture: "Client Request → FastAPI Gateway → Hybrid Vector + Lexical Search (pgvector) → Citation Extractor → Claude/OpenAI SSE Stream → Client",
+        challenges: [
+          "Latency Spikes: Mitigated by implementing token caching with Redis and async chunk parallelization via Celery.",
+          "Context Window Saturation: Implemented sliding window semantic chunking with 15% overlap and token budgeting."
+        ],
+        stack: "Python 3.11, FastAPI, PostgreSQL + pgvector, LangChain, Redis, Docker, Server-Sent Events"
+      },
+      jobqueue: {
+        category: "DISTRIBUTED SYSTEMS & CONCURRENCY",
+        title: "KiteQueue: Distributed Task & Worker Engine",
+        subtitle: "Lightweight distributed priority job queue in Go with at-least-once delivery guarantees",
+        github: "https://github.com/alexrivera/kite-queue-go",
+        demo: "https://demo-service.com",
+        problem: "Heavy background workloads (such as image transformation, email batching, and analytics aggregations) need reliable asynchronous dispatching without dropping messages when individual compute workers crash.",
+        architecture: "Producer Nodes → Redis Streams (Priority Buckets) → Go Worker Goroutines with Lease Locking → Dead-Letter Routing",
+        challenges: [
+          "At-Least-Once Delivery: Heartbeat mechanisms track active worker goroutines. If a heartbeat expires, the unacknowledged job is automatically recycled.",
+          "Dead Letter Queue (DLQ): Exponential backoff with jitter prevents thundering herd problems on failing external APIs.",
+          "Throughput: Verified sustained throughput of 50,000 tasks/second on moderate hardware."
+        ],
+        stack: "Go (Golang 1.22), Redis 7, gRPC, Protocol Buffers, Docker"
+      },
+      apigateway: {
+        category: "FULL-STACK PLATFORM & DEVELOPER TOOLS",
+        title: "PulseAPI: Schema Breaking-Change Monitor",
+        subtitle: "Full-stack developer platform scanning GraphQL & OpenAPI endpoints for breaking changes",
+        github: "https://github.com/alexrivera/pulse-api-monitor",
+        demo: "https://demo-service.com",
+        problem: "Fast-moving engineering teams frequently introduce unintended breaking API changes in staging and production environments, leading to costly runtime client failures.",
+        architecture: "CI Trigger / Ingestion Webhook → AST Parser & Tree Differ → Mutation Detector → Notification Dispatcher (Slack / Discord)",
+        challenges: [
+          "Interactive visual diff tree with side-by-side highlighting.",
+          "Multi-tenant organizational accounts with granular API token generation.",
+          "Slack and Discord automated webhook integrations."
+        ],
+        stack: "TypeScript, React, Node.js, Express, PostgreSQL, Tailwind CSS, Jest"
+      },
+      vectoreval: {
+        category: "AI INFRASTRUCTURE & BENCHMARKING",
+        title: "VectorBench: Embedding Model Profiler",
+        subtitle: "Empirical evaluation harness comparing cosine distance vs inner product performance",
+        github: "https://github.com/alexrivera/vector-bench-profiler",
+        demo: "https://demo-service.com",
+        problem: "AI engineering teams often select embedding models purely based on leaderboard scores without profiling latency, memory footprint, and dimension costs on production hardware.",
+        architecture: "Dataset Generator → Batch Embedding Engine (PyTorch) → Index Stress Tester (ChromaDB) → Statistical Reporter",
+        challenges: [
+          "Memory usage vs recall curve automated visualization.",
+          "Automated dataset synthetic augmentation for legal and medical edge vocabularies.",
+          "Asynchronous FastAPI benchmarking endpoints."
+        ],
+        stack: "Python 3.10, PyTorch, ChromaDB, Matplotlib/Seaborn, FastAPI"
+      }
+    };
+
+    // Shared Header Component
+    function Navbar({ onOpenResume, isParchmentMode }) {
+      const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+      const navigate = useNavigate();
+
+      return (
+        <header className={`sticky top-0 z-40 w-full backdrop-blur-md border-b transition-colors duration-200 ${
+          isParchmentMode 
+            ? 'bg-[#fbfbf9]/90 border-[#e2ded5] text-[#141416]' 
+            : 'bg-surface-canvas/90 border-surface-border text-gray-100'
+        }`}>
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            {/* Logo / Name */}
+            <div className="flex items-center gap-3">
+              <Link to={isParchmentMode ? "/parchment" : "/"} className="flex items-center gap-3 group focus:outline-none rounded-lg p-1">
+                <span className={`w-8 h-8 rounded-lg border flex items-center justify-center font-mono font-bold text-sm transition-all ${
+                  isParchmentMode 
+                    ? 'border-[#e2ded5] bg-white text-primary group-hover:border-primary group-hover:bg-[#ffedd5]' 
+                    : 'border-surface-border bg-surface-card text-primary group-hover:border-primary'
+                }`}>
+                  AR
+                </span>
+                <div className="flex flex-col">
+                  <span className={`text-sm font-semibold tracking-tight transition-colors ${
+                    isParchmentMode ? 'text-[#141416] group-hover:text-primary' : 'text-white group-hover:text-primary'
+                  }`}>
+                    Alex Rivera
+                  </span>
+                  <span className={`text-[11px] font-mono leading-none ${
+                    isParchmentMode ? 'text-[#78756e]' : 'text-surface-mutedText'
+                  }`}>
+                    cs.dev // b.tech'25
+                  </span>
+                </div>
+              </Link>
+            </div>
+
+            {/* Desktop Navigation Links */}
+            <nav className={`hidden md:flex items-center gap-6 text-sm font-medium ${
+              isParchmentMode ? 'text-[#5c5a54]' : 'text-surface-mutedText'
+            }`}>
+              <a href="#about" className="hover:text-primary transition-colors">About</a>
+              <a href="#experience" className="hover:text-primary transition-colors">Experience</a>
+              <a href="#projects" className="hover:text-primary transition-colors">Projects</a>
+              <a href="#skills" className="hover:text-primary transition-colors">Skills</a>
+              <a href="#education" className="hover:text-primary transition-colors">Education</a>
+              <a href="#contact" className="hover:text-primary transition-colors">Contact</a>
+            </nav>
+
+            {/* Actions & View Switcher */}
+            <div className="flex items-center gap-2 sm:gap-3">
+              {/* Screen Switcher Badge */}
+              <div className="flex items-center rounded-lg border border-opacity-40 p-0.5 text-xs font-mono">
+                <button
+                  onClick={() => navigate('/')}
+                  className={`px-2 py-1 rounded-md transition-all flex items-center gap-1 ${
+                    !isParchmentMode 
+                      ? 'bg-primary text-white font-semibold shadow-sm' 
+                      : 'text-gray-500 hover:text-gray-900'
+                  }`}
+                  title="Dark Engineering Console View"
+                >
+                  <span className="material-symbols-outlined text-xs">dark_mode</span>
+                  <span className="hidden sm:inline">Dark</span>
+                </button>
+                <button
+                  onClick={() => navigate('/parchment')}
+                  className={`px-2 py-1 rounded-md transition-all flex items-center gap-1 ${
+                    isParchmentMode 
+                      ? 'bg-primary text-white font-semibold shadow-sm' 
+                      : 'text-gray-400 hover:text-white'
+                  }`}
+                  title="Warm Editorial Parchment View"
+                >
+                  <span className="material-symbols-outlined text-xs">auto_stories</span>
+                  <span className="hidden sm:inline">Paper</span>
+                </button>
+              </div>
+
+              {/* Resume CTA */}
+              <button 
+                onClick={onOpenResume} 
+                className={`hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium border transition-all shadow-sm ${
+                  isParchmentMode
+                    ? 'border-[#e2ded5] text-[#2c2b30] hover:text-[#141416] bg-white hover:border-primary'
+                    : 'border-surface-border text-gray-200 hover:text-white bg-surface-card hover:border-primary'
+                }`}
+              >
+                <span className="material-symbols-outlined text-sm text-primary">description</span>
+                <span>Resume.pdf</span>
+              </button>
+
+              <a 
+                href="#contact" 
+                className="hidden sm:inline-flex items-center px-3.5 py-1.5 rounded-lg text-xs font-medium bg-primary hover:bg-primary-600 text-white transition-colors shadow-sm font-mono"
+              >
+                Hire Alex
+              </a>
+
+              {/* Mobile Drawer Button */}
+              <button 
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
+                className={`md:hidden p-2 rounded-lg border ${
+                  isParchmentMode ? 'border-[#e2ded5] text-[#5c5a54]' : 'border-surface-border text-surface-mutedText'
+                }`}
+                aria-label="Toggle Navigation"
+              >
+                <span className="material-symbols-outlined text-xl">
+                  {mobileMenuOpen ? 'close' : 'menu'}
+                </span>
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile Dropdown */}
+          {mobileMenuOpen && (
+            <div className={`md:hidden border-b px-6 py-4 space-y-3 font-medium text-sm ${
+              isParchmentMode ? 'bg-[#fbfbf9] border-[#e2ded5]' : 'bg-surface-card border-surface-border'
+            }`}>
+              <a href="#about" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-primary">About</a>
+              <a href="#experience" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-primary">Experience</a>
+              <a href="#projects" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-primary">Projects</a>
+              <a href="#skills" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-primary">Skills</a>
+              <a href="#education" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-primary">Education</a>
+              <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="block py-1 hover:text-primary">Contact</a>
+              <div className="pt-3 border-t border-surface-border flex gap-2">
+                <button 
+                  onClick={() => { onOpenResume(); setMobileMenuOpen(false); }}
+                  className="flex-1 py-2 text-center text-xs font-mono font-medium border border-surface-border rounded-lg"
+                >
+                  View Resume
+                </button>
+                <a 
+                  href="#contact" 
+                  onClick={() => setMobileMenuOpen(false)} 
+                  className="flex-1 py-2 text-center text-xs font-mono font-medium rounded-lg bg-primary text-white"
+                >
+                  Hire Alex
+                </a>
+              </div>
+            </div>
+          )}
+        </header>
+      );
+    }
+
+    // Interactive Project Details Modal Component
+    function ProjectModal({ project, onClose }) {
+      if (!project) return null;
+
+      return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in" role="dialog" aria-modal="true">
+          <div className="bg-surface-card border border-surface-border w-full max-w-3xl max-h-[921px] rounded-lg overflow-hidden shadow-2xl flex flex-col relative text-gray-200">
+            {/* Modal Header */}
+            <div className="px-6 py-4 border-b border-surface-border flex items-center justify-between bg-surface-canvas/80">
+              <div>
+                <span className="text-[11px] font-mono text-primary uppercase font-bold tracking-wider">{project.category}</span>
+                <h3 className="text-xl font-bold text-white tracking-tight mt-0.5">{project.title}</h3>
+              </div>
+              <button onClick={onClose} className="p-2 rounded-lg text-surface-mutedText hover:text-white hover:bg-surface-border transition-colors">
+                <span className="material-symbols-outlined text-xl">close</span>
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 overflow-y-auto space-y-6 text-sm text-surface-mutedText leading-relaxed">
+              <div>
+                <h4 className="text-white font-semibold mb-1 flex items-center gap-1.5">
+                  <span className="text-primary font-mono font-bold">01.</span> Problem Statement
+                </h4>
+                <p>{project.problem}</p>
+              </div>
+
+              <div>
+                <h4 className="text-white font-semibold mb-1 flex items-center gap-1.5">
+                  <span className="text-primary font-mono font-bold">02.</span> System Dataflow Architecture
+                </h4>
+                <div className="p-3 bg-surface-canvas rounded-lg border border-surface-border font-mono text-xs text-gray-300 mt-2">
+                  {project.architecture}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-white font-semibold mb-1.5 flex items-center gap-1.5">
+                  <span className="text-primary font-mono font-bold">03.</span> Key Concurrency & Reliability Engineering
+                </h4>
+                <ul className="space-y-1.5 list-disc list-inside">
+                  {project.challenges.map((c, i) => (
+                    <li key={i}>{c}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="pt-2 border-t border-surface-borderSubtle">
+                <h4 className="text-xs uppercase font-mono tracking-wider text-gray-400 mb-1">Production Tech Stack</h4>
+                <p className="font-mono text-xs text-primary">{project.stack}</p>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="px-6 py-3.5 border-t border-surface-border bg-surface-canvas flex items-center justify-between font-mono text-xs">
+              <span className="text-surface-subtleText">Technical Case Study Specification</span>
+              <div className="flex gap-3">
+                <a href={project.github} target="_blank" rel="noopener noreferrer" className="px-3.5 py-1.5 rounded-lg bg-surface-card border border-surface-border hover:border-gray-400 text-gray-200 transition-colors">
+                  GitHub Code
+                </a>
+                <button onClick={onClose} className="px-4 py-1.5 rounded-lg bg-primary hover:bg-primary-600 text-white font-medium">
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Interactive Resume Modal Component
+    function ResumeModal({ isOpen, onClose }) {
+      const [downloaded, setDownloaded] = useState(false);
+
+      if (!isOpen) return null;
+
+      const triggerDownloadNotice = () => {
+        setDownloaded(true);
+        setTimeout(() => setDownloaded(false), 3000);
+      };
+
+      return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm" role="dialog" aria-modal="true">
+          <div className="bg-surface-card border border-surface-border w-full max-w-4xl max-h-[942px] rounded-lg overflow-hidden shadow-2xl flex flex-col relative text-gray-200">
+            <div className="px-6 py-4 border-b border-surface-border flex items-center justify-between bg-surface-canvas">
+              <div className="flex items-center gap-3">
+                <span className="p-2 rounded-lg bg-surface-card border border-surface-border text-primary font-mono text-xs font-bold">PDF</span>
+                <div>
+                  <h3 className="text-base font-bold text-white tracking-tight">Alex_Rivera_Software_Engineer_Resume.pdf</h3>
+                  <p className="text-xs font-mono text-surface-mutedText">Updated for Summer/Fall 2025 Opportunities • 1-Page ATS Standard</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <button onClick={onClose} className="p-2 rounded-lg text-surface-mutedText hover:text-white hover:bg-surface-border transition-colors">
+                  <span className="material-symbols-outlined text-xl">close</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Resume Body */}
+            <div className="p-6 md:p-8 overflow-y-auto bg-[#0a0c10] text-gray-200 font-sans space-y-6 text-xs leading-relaxed border-t border-surface-borderSubtle">
+              {/* Header */}
+              <div className="text-center pb-4 border-b border-surface-border space-y-1">
+                <h2 className="text-2xl font-bold tracking-tight text-white">ALEX RIVERA</h2>
+                <div className="font-mono text-surface-mutedText text-[11px] flex flex-wrap justify-center gap-3">
+                  <span>San Francisco, CA</span>
+                  <span>•</span>
+                  <span>alex.rivera.dev@gmail.com</span>
+                  <span>•</span>
+                  <span>github.com/alexrivera</span>
+                  <span>•</span>
+                  <span>linkedin.com/in/alexrivera-cs</span>
+                </div>
+                <p className="text-xs font-medium text-primary pt-1">
+                  Targeting: Software Engineer | Full-Stack Developer | Backend Systems | AI/ML Engineering
+                </p>
+              </div>
+
+              {/* Education */}
+              <div className="space-y-1.5">
+                <h4 className="text-xs font-mono uppercase font-bold text-white tracking-wider border-b border-surface-border pb-1">
+                  EDUCATION
+                </h4>
+                <div className="flex justify-between items-baseline font-mono">
+                  <div><span className="font-bold text-white">California State University, Long Beach</span> — B.S. in Computer Science</div>
+                  <span className="text-surface-mutedText text-[11px]">Expected May 2025</span>
+                </div>
+                <p className="text-surface-mutedText text-[11px] font-mono">
+                  GPA: 3.91/4.00 (Dean’s Honor List) | Coursework: Distributed Systems, Operating Systems, Algorithms & Complexity, Database Systems, Computer Networks
+                </p>
+              </div>
+
+              {/* Experience */}
+              <div className="space-y-4">
+                <h4 className="text-xs font-mono uppercase font-bold text-white tracking-wider border-b border-surface-border pb-1">
+                  TECHNICAL EXPERIENCE
+                </h4>
+                <div>
+                  <div className="flex justify-between items-baseline font-mono">
+                    <span className="font-bold text-white">ScaleCloud Infrastructure Labs — Software Engineering Intern</span>
+                    <span className="text-surface-mutedText text-[11px]">Jun 2024 – Aug 2024</span>
+                  </div>
+                  <p className="text-surface-mutedText text-[11px] italic mb-1.5 font-mono">San Francisco, CA | Go, PostgreSQL, Redis, Docker, GitHub Actions</p>
+                  <ul className="list-disc list-inside space-y-1 text-surface-mutedText text-[11px]">
+                    <li>Engineered a high-throughput telemetry ingestion microservice in Go and PostgreSQL, handling 1.2M+ daily log events with 99.98% uptime.</li>
+                    <li>Optimized partition indexing and join execution in PostgreSQL, reducing p95 dashboard query latency from 840ms to 92ms.</li>
+                    <li>Implemented distributed rate-limiting via Redis token bucket algorithm, mitigating denial-of-service spikes on internal endpoints.</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <div className="flex justify-between items-baseline font-mono">
+                    <span className="font-bold text-white">Vanguard Financial Analytics — Full-Stack Developer Intern</span>
+                    <span className="text-surface-mutedText text-[11px]">Jun 2023 – Aug 2023</span>
+                  </div>
+                  <p className="text-surface-mutedText text-[11px] italic mb-1.5 font-mono">Remote | TypeScript, React, Node.js, Express, REST APIs</p>
+                  <ul className="list-disc list-inside space-y-1 text-surface-mutedText text-[11px]">
+                    <li>Developed accessible, responsive investor portfolio management views using React and Tailwind CSS for 14K+ active retail users.</li>
+                    <li>Engineered role-based authentication and secure JWT validation middleware with CSRF protection on Node.js/Express APIs.</li>
+                    <li>Authored comprehensive Jest unit tests and improved test coverage from 64% to 82% across shared frontend utility modules.</li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* Projects */}
+              <div className="space-y-3">
+                <h4 className="text-xs font-mono uppercase font-bold text-white tracking-wider border-b border-surface-border pb-1">
+                  NOTABLE TECHNICAL PROJECTS
+                </h4>
+                <div>
+                  <div className="flex justify-between items-baseline font-mono">
+                    <span className="font-bold text-white">NexusRAG: Distributed Enterprise Knowledge Agent</span>
+                    <span className="text-surface-mutedText text-[11px]">FastAPI, Python, pgvector, LangChain</span>
+                  </div>
+                  <p className="text-surface-mutedText text-[11px] mt-0.5">
+                    Engineered hybrid vector search (BM25 lexical + dense HNSW) achieving sub-250ms latency across 100K+ enterprise documents. Added streaming Server-Sent Events (SSE) and Celery background re-indexing.
+                  </p>
+                </div>
+                <div>
+                  <div className="flex justify-between items-baseline font-mono">
+                    <span className="font-bold text-white">KiteQueue: Distributed Task Queue</span>
+                    <span className="text-surface-mutedText text-[11px]">Go, Redis, gRPC</span>
+                  </div>
+                  <p className="text-surface-mutedText text-[11px] mt-0.5">
+                    Built priority worker pool with heartbeats, dead-letter re-routing, and exponential backoffs capable of 50,000 tasks/second.
+                  </p>
+                </div>
+              </div>
+
+              {/* Skills */}
+              <div className="space-y-2">
+                <h4 className="text-xs font-mono uppercase font-bold text-white tracking-wider border-b border-surface-border pb-1">
+                  SKILLS &amp; PROFICIENCIES
+                </h4>
+                <div className="text-[11px] font-mono space-y-1 text-surface-mutedText">
+                  <p><strong className="text-gray-200">Languages:</strong> TypeScript, JavaScript, Python, Go, Java, SQL (PostgreSQL), C++</p>
+                  <p><strong class="text-gray-200">Frameworks:</strong> React, Next.js, Node.js, Express, FastAPI, Tailwind CSS</p>
+                  <p><strong className="text-gray-200">Infrastructure:</strong> Docker, Git/GitHub, Redis, PostgreSQL, AWS (EC2/S3), CI/CD, Nginx</p>
+                  <p><strong className="text-gray-200">AI/ML:</strong> Vector Search (pgvector, ChromaDB), LangChain, RAG Systems, Embedding Models</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="px-6 py-3.5 border-t border-surface-border bg-surface-canvas flex justify-between items-center text-xs font-mono">
+              <span className="text-surface-subtleText">ATS-Optimized Formatting</span>
+              <div className="flex items-center gap-3">
+                {downloaded && <span className="text-emerald-400">PDF Download Started ✓</span>}
+                <button onClick={triggerDownloadNotice} className="px-4 py-1.5 rounded-lg bg-primary hover:bg-primary-600 text-white font-medium flex items-center gap-1.5 shadow-sm">
+                  <span className="material-symbols-outlined text-sm">download</span>
+                  <span>Download PDF</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Common Contact Form with React State
+    function ContactSection({ isParchmentMode }) {
+      const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
+      const [status, setStatus] = useState('idle'); // 'idle' | 'sending' | 'sent'
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        setStatus('sending');
+        setTimeout(() => {
+          setStatus('sent');
+          setFormData({ name: '', email: '', subject: '', message: '' });
+          setTimeout(() => setStatus('idle'), 4000);
+        }, 800);
+      };
+
+      return (
+        <section id="contact" className={`py-16 md:py-20 border-b transition-colors ${
+          isParchmentMode ? 'border-[#e2ded5] bg-[#fbfbf9]' : 'border-surface-border bg-surface-canvas'
+        }`}>
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+              
+              {/* Left Direct Links */}
+              <div className="lg:col-span-5 space-y-6">
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-xs text-primary font-semibold tracking-wider uppercase">07 // DIRECT CONTACT</span>
+                </div>
+                <h2 className={`text-2xl sm:text-3xl font-bold tracking-tight ${
+                  isParchmentMode ? 'text-[#141416]' : 'text-white'
+                }`}>
+                  Let's talk engineering.
+                </h2>
+                <p className={`text-sm leading-relaxed ${
+                  isParchmentMode ? 'text-[#575653]' : 'text-surface-mutedText'
+                }`}>
+                  I reply promptly to inquiries regarding open full-time positions, technical questions about my projects, or engineering collaborations.
+                </p>
+
+                <div className="space-y-3 font-mono text-xs pt-2">
+                  <a href="mailto:alex.rivera.dev@gmail.com" className={`p-3.5 rounded-lg border flex items-center justify-between transition-colors ${
+                    isParchmentMode 
+                      ? 'bg-white border-[#e2ded5] hover:border-primary text-[#2c2b30]' 
+                      : 'bg-surface-card border-surface-border hover:border-primary text-gray-200'
+                  }`}>
+                    <div className="flex items-center gap-2.5">
+                      <span className="material-symbols-outlined text-primary text-sm">mail</span>
+                      <span>alex.rivera.dev@gmail.com</span>
+                    </div>
+                    <span className="text-primary font-semibold">Email ↗</span>
+                  </a>
+
+                  <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className={`p-3.5 rounded-lg border flex items-center justify-between transition-colors ${
+                    isParchmentMode 
+                      ? 'bg-white border-[#e2ded5] hover:border-primary text-[#2c2b30]' 
+                      : 'bg-surface-card border-surface-border hover:border-primary text-gray-200'
+                  }`}>
+                    <div className="flex items-center gap-2.5">
+                      <span className="material-symbols-outlined text-primary text-sm">link</span>
+                      <span>linkedin.com/in/alexrivera-cs</span>
+                    </div>
+                    <span className="text-primary font-semibold">Connect ↗</span>
+                  </a>
+
+                  <a href="https://github.com" target="_blank" rel="noopener noreferrer" className={`p-3.5 rounded-lg border flex items-center justify-between transition-colors ${
+                    isParchmentMode 
+                      ? 'bg-white border-[#e2ded5] hover:border-primary text-[#2c2b30]' 
+                      : 'bg-surface-card border-surface-border hover:border-primary text-gray-200'
+                  }`}>
+                    <div className="flex items-center gap-2.5">
+                      <span className="material-symbols-outlined text-primary text-sm">terminal</span>
+                      <span>github.com/alexrivera</span>
+                    </div>
+                    <span className="text-primary font-semibold">Repositories ↗</span>
+                  </a>
+                </div>
+              </div>
+
+              {/* Right Direct Message Form */}
+              <div className={`lg:col-span-7 border rounded-lg p-6 sm:p-7 ${
+                isParchmentMode ? 'bg-white border-[#e2ded5] shadow-sm' : 'bg-surface-card border-surface-border'
+              }`}>
+                <h3 className={`text-base font-semibold mb-1 ${isParchmentMode ? 'text-[#141416]' : 'text-white'}`}>
+                  Direct Message
+                </h3>
+                <p className={`text-xs mb-5 font-mono ${isParchmentMode ? 'text-[#6c6962]' : 'text-surface-mutedText'}`}>
+                  Dispatches directly to my primary inbox with verified status.
+                </p>
+
+                <form onSubmit={handleSubmit} className="space-y-4 text-xs font-mono">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <label className="block text-gray-300">Name / Recruiter Org <span className="text-primary">*</span></label>
+                      <input 
+                        type="text" 
+                        required 
+                        value={formData.name}
+                        onChange={(e) => setFormData({...formData, name: e.target.value})}
+                        placeholder="e.g. Sarah Connor (Tech Recruiter)" 
+                        className={`w-full rounded-lg px-3.5 py-2.5 transition-colors focus:outline-none focus:ring-1 focus:ring-primary ${
+                          isParchmentMode 
+                            ? 'bg-[#fbfbf9] border border-[#e2ded5] text-[#141416]' 
+                            : 'bg-surface-canvas border border-surface-border text-white'
+                        }`} 
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="block text-gray-300">Work Email <span className="text-primary">*</span></label>
+                      <input 
+                        type="email" 
+                        required 
+                        value={formData.email}
+                        onChange={(e) => setFormData({...formData, email: e.target.value})}
+                        placeholder="s.connor@company.com" 
+                        className={`w-full rounded-lg px-3.5 py-2.5 transition-colors focus:outline-none focus:ring-1 focus:ring-primary ${
+                          isParchmentMode 
+                            ? 'bg-[#fbfbf9] border border-[#e2ded5] text-[#141416]' 
+                            : 'bg-surface-canvas border border-surface-border text-white'
+                        }`} 
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="block text-gray-300">Subject / Role Opportunity</label>
+                    <input 
+                      type="text" 
+                      value={formData.subject}
+                      onChange={(e) => setFormData({...formData, subject: e.target.value})}
+                      placeholder="SWE (New Grad) Role @ [Company Name]" 
+                      className={`w-full rounded-lg px-3.5 py-2.5 transition-colors focus:outline-none focus:ring-1 focus:ring-primary ${
+                        isParchmentMode 
+                          ? 'bg-[#fbfbf9] border border-[#e2ded5] text-[#141416]' 
+                          : 'bg-surface-canvas border border-surface-border text-white'
+                      }`} 
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="block text-gray-300">Message Details <span className="text-primary">*</span></label>
+                    <textarea 
+                      rows="4" 
+                      required 
+                      value={formData.message}
+                      onChange={(e) => setFormData({...formData, message: e.target.value})}
+                      placeholder="Tell me about the team, tech stack, or questions about my background..." 
+                      className={`w-full rounded-lg px-3.5 py-2.5 transition-colors focus:outline-none focus:ring-1 focus:ring-primary ${
+                        isParchmentMode 
+                          ? 'bg-[#fbfbf9] border border-[#e2ded5] text-[#141416]' 
+                          : 'bg-surface-canvas border border-surface-border text-white'
+                      }`}
+                    ></textarea>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-2">
+                    <button 
+                      type="submit" 
+                      disabled={status === 'sending'} 
+                      className="px-5 py-2.5 rounded-lg bg-primary hover:bg-primary-600 text-white font-medium transition-colors flex items-center gap-2 shadow-sm"
+                    >
+                      {status === 'sending' ? (
+                        <>
+                          <span className="material-symbols-outlined text-sm animate-spin">progress_activity</span>
+                          <span>Sending...</span>
+                        </>
+                      ) : status === 'sent' ? (
+                        <>
+                          <span className="material-symbols-outlined text-sm">check_circle</span>
+                          <span>Message Dispatched</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Send Message</span>
+                          <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                        </>
+                      )}
+                    </button>
+                    {status === 'sent' && (
+                      <span className="text-xs text-emerald-400 font-mono">
+                        ✓ Dispatched successfully! I will reply within 24 hours.
+                      </span>
+                    )}
+                  </div>
+                </form>
+              </div>
+
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    // Shared Footer
+    function Footer({ isParchmentMode, onOpenResume }) {
+      return (
+        <footer className={`border-t py-8 text-xs font-mono transition-colors ${
+          isParchmentMode ? 'border-[#e2ded5] bg-[#f5f4f0] text-[#575653]' : 'border-surface-border bg-surface-canvas text-surface-mutedText'
+        }`}>
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <span className={`font-semibold ${isParchmentMode ? 'text-[#141416]' : 'text-white'}`}>Alex Rivera</span>
+              <span>— Software Engineer • Full-Stack • AI/ML</span>
+            </div>
+            <div className="flex items-center gap-4">
+              <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">GitHub</a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">LinkedIn</a>
+              <button onClick={onOpenResume} className="hover:text-primary transition-colors">Resume.pdf</button>
+              <span className={isParchmentMode ? 'text-[#78756e]' : 'text-surface-subtleText'}>© 2025 Alex Rivera</span>
+            </div>
+          </div>
+        </footer>
+      );
+    }
+
+    // ==========================================
+    // SCREEN 1: DARK SYSTEM ENGINEERING CONSOLE
+    // ==========================================
+    function DarkPortfolioScreen({ onOpenProject, onOpenResume }) {
+      return (
+        <div className="bg-surface-canvas text-gray-100 min-h-screen">
+          {/* HERO SECTION */}
+          <section id="hero" className="relative pt-12 pb-16 md:pt-20 md:pb-24 border-b border-surface-border overflow-hidden">
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#161b2415_1px,transparent_1px),linear-gradient(to_bottom,#161b2415_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none opacity-40"></div>
+            
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+                
+                {/* Left Content */}
+                <div className="lg:col-span-7 space-y-6">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-surface-border bg-surface-card text-[12px] font-mono font-medium text-primary">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>SOFTWARE ENGINEER • FULL-STACK • BACKEND &amp; AI</span>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white leading-tight">
+                      Alex Rivera
+                    </h1>
+                    <p className="text-xl sm:text-2xl text-gray-300 font-medium leading-snug">
+                      Building reliable software, scalable backend APIs, and production AI-powered systems.
+                    </p>
+                  </div>
+
+                  <p className="text-base text-surface-mutedText leading-relaxed max-w-2xl font-normal">
+                    Final-year Computer Science Engineering student at California State University. Focused on engineering resilient distributed backends, robust full-stack web platforms, and retrieval-augmented (RAG) AI architectures using TypeScript, Python, PostgreSQL, and Go.
+                  </p>
+
+                  <div className="pt-2 flex flex-wrap items-center gap-4">
+                    <a href="#projects" className="px-5 py-2.5 rounded-lg bg-primary hover:bg-primary-600 text-white text-sm font-medium transition-colors inline-flex items-center gap-2 shadow-sm font-mono">
+                      <span>View Engineered Projects</span>
+                      <span className="material-symbols-outlined text-sm">arrow_downward</span>
+                    </a>
+                    <button onClick={onOpenResume} className="px-5 py-2.5 rounded-lg border border-surface-border hover:border-gray-500 text-gray-200 hover:text-white bg-surface-card hover:bg-surface-cardHover text-sm font-medium transition-all inline-flex items-center gap-2 font-mono">
+                      <span className="material-symbols-outlined text-primary text-sm">description</span>
+                      <span>Read Resume / CV</span>
+                    </button>
+                  </div>
+
+                  {/* Secondary Proof Links */}
+                  <div className="pt-2 flex items-center gap-5 text-xs font-mono text-surface-mutedText">
+                    <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hover:text-white flex items-center gap-1.5 transition-colors">
+                      <span className="material-symbols-outlined text-sm">code</span>
+                      <span>github.com/alexrivera</span>
+                    </a>
+                    <span className="text-surface-border">•</span>
+                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-white flex items-center gap-1.5 transition-colors">
+                      <span className="material-symbols-outlined text-sm">share</span>
+                      <span>linkedin.com/in/alexrivera-cs</span>
+                    </a>
+                    <span className="text-surface-border">•</span>
+                    <a href="mailto:alex.rivera.dev@gmail.com" className="hover:text-white flex items-center gap-1.5 transition-colors">
+                      <span className="material-symbols-outlined text-sm">mail</span>
+                      <span>alex.rivera.dev@gmail.com</span>
+                    </a>
+                  </div>
+                </div>
+
+                {/* Right Terminal Card */}
+                <div className="lg:col-span-5">
+                  <div className="bg-surface-card border border-surface-border rounded-lg p-5 sm:p-6 shadow-xl space-y-4">
+                    <div className="flex items-center justify-between border-b border-surface-border pb-3">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 rounded-full bg-red-500/80"></span>
+                        <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></span>
+                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
+                        <span className="text-xs font-mono text-surface-mutedText ml-2">rivera_dev_env.sh</span>
+                      </div>
+                      <span className="text-[11px] font-mono text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded-md border border-emerald-800/40">Status: Active</span>
+                    </div>
+
+                    <div className="space-y-3 font-mono text-xs">
+                      <div className="flex justify-between items-center py-1 border-b border-surface-borderSubtle">
+                        <span className="text-surface-mutedText">Graduation:</span>
+                        <span className="text-white font-medium">May 2025 (B.S. CS, Honors)</span>
+                      </div>
+                      <div className="flex justify-between items-center py-1 border-b border-surface-borderSubtle">
+                        <span className="text-surface-mutedText">Target Roles:</span>
+                        <span className="text-primary font-medium">SWE • Full-Stack • Backend • AI/ML</span>
+                      </div>
+                      <div className="flex justify-between items-center py-1 border-b border-surface-borderSubtle">
+                        <span className="text-surface-mutedText">Primary Languages:</span>
+                        <span className="text-gray-200">TypeScript, Python, Go, Java, SQL</span>
+                      </div>
+                      <div className="flex justify-between items-center py-1 border-b border-surface-borderSubtle">
+                        <span className="text-surface-mutedText">Core Stack:</span>
+                        <span className="text-gray-200">React, Node/FastAPI, Postgres, Docker</span>
+                      </div>
+                      <div className="flex justify-between items-center py-1 border-b border-surface-borderSubtle">
+                        <span className="text-surface-mutedText">Location / Auth:</span>
+                        <span className="text-gray-200">US Citizen • San Francisco / Remote</span>
+                      </div>
+                    </div>
+
+                    <div className="p-3 bg-surface-canvas rounded-lg border border-surface-border font-mono text-[11px] space-y-1.5">
+                      <div className="flex items-center justify-between text-surface-mutedText">
+                        <span>SYSTEM_LOAD: 0.14</span>
+                        <span>TEST_COVERAGE: 88.4%</span>
+                      </div>
+                      <div className="w-full bg-surface-border h-1.5 rounded-full overflow-hidden">
+                        <div className="bg-primary h-full w-[88%]"></div>
+                      </div>
+                      <p className="text-surface-subtleText pt-0.5">
+                        &gt; Ready for summer/fall 2025 full-time software engineering roles.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </section>
+
+          {/* QUICK CREDIBILITY SCAN STRIP */}
+          <section className="border-b border-surface-border bg-surface-card/60 py-4" aria-label="Quick Recruiter Summary">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 text-center">
+                <div className="border-r border-surface-border last:border-none px-2">
+                  <span className="block text-xs font-mono text-surface-mutedText">ACADEMIC</span>
+                  <span className="text-sm font-semibold text-white">B.S. CS '25 (3.9 GPA)</span>
+                </div>
+                <div className="border-r border-surface-border last:border-none px-2">
+                  <span className="block text-xs font-mono text-surface-mutedText">EXPERIENCE</span>
+                  <span className="text-sm font-semibold text-white">2 SWE Internships</span>
+                </div>
+                <div className="border-r border-surface-border last:border-none px-2">
+                  <span className="block text-xs font-mono text-surface-mutedText">PRODUCTION APPS</span>
+                  <span className="text-sm font-semibold text-white">100K+ Req/Day Handled</span>
+                </div>
+                <div className="border-r border-surface-border last:border-none px-2">
+                  <span className="block text-xs font-mono text-surface-mutedText">SYSTEM FOCUS</span>
+                  <span className="text-sm font-semibold text-white">Distributed &amp; RAG AI</span>
+                </div>
+                <div className="col-span-2 sm:col-span-1 px-2 flex flex-col justify-center items-center">
+                  <span className="inline-flex items-center gap-1.5 text-xs font-mono text-emerald-400 font-medium">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                    Interview Ready
+                  </span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ABOUT & PRACTICES */}
+          <section id="about" className="py-16 md:py-20 border-b border-surface-border">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center gap-3 mb-10">
+                <span className="font-mono text-xs text-primary font-semibold tracking-wider uppercase">01 // PROFILE</span>
+                <div className="h-px bg-surface-border flex-grow"></div>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                <div className="lg:col-span-6 space-y-5">
+                  <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
+                    Engineering with pragmatism, rigor, and depth.
+                  </h2>
+                  <p className="text-surface-mutedText leading-relaxed">
+                    I am a software engineer graduating in May 2025 with hands-on experience building web systems that need to be both reliable under load and clean to maintain. Rather than viewing engineering solely as writing code, I treat it as designing end-to-end solutions that solve tangible business problems.
+                  </p>
+                  <p className="text-surface-mutedText leading-relaxed">
+                    During my internships at cloud infrastructure and fintech companies, I owned production API endpoints, optimized complex database queries, and implemented LLM-driven pipelines with strict latency guarantees.
+                  </p>
+
+                  <div className="pt-2">
+                    <h3 className="text-xs font-mono font-semibold text-gray-300 uppercase tracking-wider mb-3">
+                      Core Domains of Focus:
+                    </h3>
+                    <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+                      <div className="p-2.5 rounded-lg bg-surface-card border border-surface-border text-gray-200">
+                        <span className="text-primary font-bold mr-1">&gt;</span> Distributed Backend
+                      </div>
+                      <div className="p-2.5 rounded-lg bg-surface-card border border-surface-border text-gray-200">
+                        <span className="text-primary font-bold mr-1">&gt;</span> Full-Stack Web
+                      </div>
+                      <div className="p-2.5 rounded-lg bg-surface-card border border-surface-border text-gray-200">
+                        <span className="text-primary font-bold mr-1">&gt;</span> RAG &amp; Vector Pipeline AI
+                      </div>
+                      <div className="p-2.5 rounded-lg bg-surface-card border border-surface-border text-gray-200">
+                        <span className="text-primary font-bold mr-1">&gt;</span> Schema Design &amp; Caching
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="lg:col-span-6 bg-surface-card border border-surface-border rounded-lg p-6 sm:p-7 space-y-6">
+                  <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+                    <span className="material-symbols-outlined text-primary">verified</span>
+                    <span>Engineering Values &amp; Practices</span>
+                  </h3>
+
+                  <div className="space-y-4 text-sm">
+                    <div className="border-l-2 border-primary pl-4 space-y-1">
+                      <span className="font-medium text-white block">Understand Foundations Over Black Boxes</span>
+                      <p className="text-surface-mutedText text-xs leading-relaxed">
+                        I don't just import packages blindly; I examine how query planners work, how network protocols handle handshakes, and why memory leaks occur in Node/V8 runtimes.
+                      </p>
+                    </div>
+
+                    <div className="border-l-2 border-surface-border pl-4 space-y-1">
+                      <span className="font-medium text-white block">Resilience, Observability &amp; Testing</span>
+                      <p className="text-surface-mutedText text-xs leading-relaxed">
+                        Code isn't finished when it works on localhost. I structure codebases with unit/integration testing (Jest, PyTest), structured logging, and idempotent API contracts.
+                      </p>
+                    </div>
+
+                    <div className="border-l-2 border-surface-border pl-4 space-y-1">
+                      <span className="font-medium text-white block">Fast Feedback &amp; Shippable Iteration</span>
+                      <p className="text-surface-mutedText text-xs leading-relaxed">
+                        I favor building minimum viable architectures that deploy quickly, gather real metrics, and scale iteratively based on empirical bottlenecks rather than premature speculation.
+                      </p>
+                    </div>
+
+                    <div className="border-l-2 border-surface-border pl-4 space-y-1">
+                      <span className="font-medium text-white block">Empathetic Team Collaboration</span>
+                      <p className="text-surface-mutedText text-xs leading-relaxed">
+                        Clear PR writeups, thorough documentation, constructive code reviews, and communicative asynchronous updates are non-negotiable standards in my workflow.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* WORK EXPERIENCE */}
+          <section id="experience" className="py-16 md:py-20 border-b border-surface-border bg-surface-canvas">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center gap-3 mb-12">
+                <span className="font-mono text-xs text-primary font-semibold tracking-wider uppercase">02 // WORK EXPERIENCE</span>
+                <div className="h-px bg-surface-border flex-grow"></div>
+              </div>
+
+              <div className="space-y-8">
+                {/* Exp 1 */}
+                <div className="relative bg-surface-card border border-surface-border rounded-lg p-6 sm:p-8 hover:border-surface-highlight transition-all">
+                  <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-b border-surface-border pb-4 mb-5">
+                    <div>
+                      <h3 className="text-xl font-bold text-white tracking-tight">Software Engineering Intern</h3>
+                      <div className="text-sm text-primary font-medium font-mono mt-0.5">ScaleCloud Infrastructure Labs • San Francisco, CA</div>
+                    </div>
+                    <div className="text-xs font-mono text-surface-mutedText bg-surface-canvas px-3 py-1 rounded-lg border border-surface-border">
+                      June 2024 — August 2024 (Summer)
+                    </div>
+                  </div>
+
+                  <ul className="space-y-2.5 text-sm text-surface-mutedText mb-6 font-normal">
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary font-mono text-xs mt-1">&gt;</span>
+                      <span>Designed and deployed an automated telemetry ingestion microservice in <strong>Go</strong> and <strong>PostgreSQL</strong> processing over <strong>1.2 million log events/day</strong> from edge nodes.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary font-mono text-xs mt-1">&gt;</span>
+                      <span>Optimized SQL analytical queries by indexing partition tables and restructuring joining logic, decreasing 95th percentile dashboard query latency from <strong>840ms to 92ms</strong>.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary font-mono text-xs mt-1">&gt;</span>
+                      <span>Engineered robust rate-limiting middleware using <strong>Redis token bucket algorithms</strong> to protect internal endpoints against denial-of-service traffic spikes.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary font-mono text-xs mt-1">&gt;</span>
+                      <span>Authored comprehensive unit and integration test suites with 89% coverage and integrated them into GitHub Actions CI/CD pipelines.</span>
+                    </li>
+                  </ul>
+
+                  <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-surface-borderSubtle">
+                    <span className="text-xs font-mono text-surface-subtleText mr-2">Stack:</span>
+                    {['Go (Golang)', 'PostgreSQL', 'Redis', 'Docker', 'GitHub Actions'].map((t, idx) => (
+                      <span key={idx} className="px-2.5 py-0.5 text-xs font-mono bg-surface-canvas border border-surface-border rounded-md text-gray-300">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Exp 2 */}
+                <div className="relative bg-surface-card border border-surface-border rounded-lg p-6 sm:p-8 hover:border-surface-highlight transition-all">
+                  <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-b border-surface-border pb-4 mb-5">
+                    <div>
+                      <h3 className="text-xl font-bold text-white tracking-tight">Full-Stack Developer Intern</h3>
+                      <div className="text-sm text-primary font-medium font-mono mt-0.5">Vanguard Financial Analytics • Remote</div>
+                    </div>
+                    <div className="text-xs font-mono text-surface-mutedText bg-surface-canvas px-3 py-1 rounded-lg border border-surface-border">
+                      June 2023 — August 2023 (Summer)
+                    </div>
+                  </div>
+
+                  <ul className="space-y-2.5 text-sm text-surface-mutedText mb-6">
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary font-mono text-xs mt-1">&gt;</span>
+                      <span>Built client-facing portfolio rebalancing views using <strong>React, TypeScript, and Tailwind CSS</strong>, serving 14,000+ active retail investors.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary font-mono text-xs mt-1">&gt;</span>
+                      <span>Integrated RESTful microservices with <strong>Node.js / Express</strong> and structured JWT-based role-based access control (RBAC) with strict CSRF protection.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary font-mono text-xs mt-1">&gt;</span>
+                      <span>Collaborated with senior QA and product managers to resolve 40+ high-priority frontend regression tickets prior to the Q3 production release.</span>
+                    </li>
+                  </ul>
+
+                  <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-surface-borderSubtle">
+                    <span className="text-xs font-mono text-surface-subtleText mr-2">Stack:</span>
+                    {['TypeScript', 'React', 'Node.js', 'Express', 'REST APIs'].map((t, idx) => (
+                      <span key={idx} className="px-2.5 py-0.5 text-xs font-mono bg-surface-canvas border border-surface-border rounded-md text-gray-300">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Exp 3 */}
+                <div className="relative bg-surface-card border border-surface-border rounded-lg p-6 sm:p-8 hover:border-surface-highlight transition-all">
+                  <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-b border-surface-border pb-4 mb-5">
+                    <div>
+                      <h3 className="text-xl font-bold text-white tracking-tight">Undergraduate Teaching Assistant: Data Structures &amp; Algorithms</h3>
+                      <div className="text-sm text-primary font-medium font-mono mt-0.5">Department of Computer Science • CSU</div>
+                    </div>
+                    <div className="text-xs font-mono text-surface-mutedText bg-surface-canvas px-3 py-1 rounded-lg border border-surface-border">
+                      January 2024 — May 2024
+                    </div>
+                  </div>
+
+                  <ul className="space-y-2.5 text-sm text-surface-mutedText mb-6">
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary font-mono text-xs mt-1">&gt;</span>
+                      <span>Led weekly discussion labs and office hours for 85+ students, explaining graph traversals (BFS/DFS, Dijkstra), tree rebalancing, and asymptotic runtime complexity.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary font-mono text-xs mt-1">&gt;</span>
+                      <span>Authored automated autograding scripts in Python to evaluate student submissions for algorithmic correctness and memory safety.</span>
+                    </li>
+                  </ul>
+
+                  <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-surface-borderSubtle">
+                    <span className="text-xs font-mono text-surface-subtleText mr-2">Focus:</span>
+                    {['Algorithms', 'Data Structures', 'Python Testing'].map((t, idx) => (
+                      <span key={idx} className="px-2.5 py-0.5 text-xs font-mono bg-surface-canvas border border-surface-border rounded-md text-gray-300">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </section>
+
+          {/* PROJECTS */}
+          <section id="projects" className="py-16 md:py-20 border-b border-surface-border">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <span className="font-mono text-xs text-primary font-semibold tracking-wider uppercase">03 // SELECTED TECHNICAL WORK</span>
+                </div>
+                <span className="text-xs font-mono text-surface-mutedText hidden sm:inline">Click any project to inspect architecture details</span>
+              </div>
+              <div className="h-px bg-surface-border mb-10"></div>
+
+              {/* NexusRAG Horizontal Case Study */}
+              <div className="mb-10 bg-surface-card border border-surface-border rounded-lg p-6 sm:p-8 lg:p-10 shadow-lg relative group hover:border-primary transition-all">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                  <div className="lg:col-span-8 space-y-4">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2.5 py-0.5 text-[11px] font-mono uppercase bg-primary/10 text-primary rounded-md border border-primary/30 font-semibold">Featured Case Study</span>
+                      <span className="text-xs font-mono text-surface-mutedText">Production Ready</span>
+                    </div>
+
+                    <div>
+                      <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                        NexusRAG: Distributed Enterprise Knowledge Agent
+                      </h3>
+                      <p className="text-sm font-mono text-primary mt-1">High-Throughput Retrieval-Augmented Generation Platform with Citation Verification</p>
+                    </div>
+
+                    <div className="space-y-2 text-sm text-surface-mutedText">
+                      <p>
+                        <strong className="text-white font-medium">The Problem:</strong> Enterprise documentation queries suffered from high hallucinations and slow semantic retrieval across millions of dense technical PDF tokens.
+                      </p>
+                      <p>
+                        <strong className="text-white font-medium">Implementation:</strong> Built an asynchronous pipeline in <strong>FastAPI and Python</strong> leveraging <strong>pgvector (PostgreSQL)</strong> for HNSW indexing, <strong>OpenAI embeddings</strong>, and <strong>LangChain</strong> orchestration. Implemented hybrid reciprocal rank fusion delivering sub-250ms query responses.
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono text-gray-300 pt-1">
+                      <div className="flex items-center gap-2 bg-surface-canvas p-2.5 rounded-lg border border-surface-border">
+                        <span className="text-primary font-bold">•</span>
+                        <span>Hybrid Semantic + BM25 Search</span>
+                      </div>
+                      <div className="flex items-center gap-2 bg-surface-canvas p-2.5 rounded-lg border border-surface-border">
+                        <span className="text-primary font-bold">•</span>
+                        <span>Streaming SSE Response Tokenizer</span>
+                      </div>
+                      <div className="flex items-center gap-2 bg-surface-canvas p-2.5 rounded-lg border border-surface-border">
+                        <span className="text-primary font-bold">•</span>
+                        <span>Celery + Redis Background Workers</span>
+                      </div>
+                      <div className="flex items-center gap-2 bg-surface-canvas p-2.5 rounded-lg border border-surface-border">
+                        <span className="text-primary font-bold">•</span>
+                        <span>Strict Token-Budget Caching Layer</span>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2 pt-3">
+                      {['Python 3.11', 'FastAPI', 'PostgreSQL (pgvector)', 'LangChain', 'Redis', 'Docker'].map((tag, idx) => (
+                        <span key={idx} className="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded-md text-gray-200">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="lg:col-span-4 bg-surface-canvas border border-surface-border rounded-lg p-5 space-y-5">
+                    <div className="space-y-3 font-mono text-xs">
+                      <div className="text-gray-400 font-medium uppercase tracking-wider text-[11px] pb-1 border-b border-surface-border">
+                        Benchmark Metrics
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-surface-mutedText">Median Query Time:</span>
+                        <span className="text-emerald-400 font-semibold">185ms</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-surface-mutedText">Indexing Throughput:</span>
+                        <span className="text-white font-semibold">1,200 chunks/min</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-surface-mutedText">Citation Precision:</span>
+                        <span className="text-white font-semibold">96.4%</span>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2 pt-2">
+                      <button onClick={() => onOpenProject('nexusrag')} className="w-full py-2.5 rounded-lg bg-primary hover:bg-primary-600 text-white text-xs font-mono font-medium transition-colors flex items-center justify-center gap-2">
+                        <span className="material-symbols-outlined text-sm">visibility</span>
+                        <span>Open Deep Architecture Modal</span>
+                      </button>
+                      <div className="flex gap-2">
+                        <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="flex-1 py-2 text-center text-xs font-mono rounded-lg bg-surface-card border border-surface-border hover:border-gray-400 text-gray-200 transition-colors">
+                          GitHub Code
+                        </a>
+                        <a href="https://demo-service.com" target="_blank" rel="noopener noreferrer" className="flex-1 py-2 text-center text-xs font-mono rounded-lg bg-surface-card border border-surface-border hover:border-gray-400 text-primary transition-colors">
+                          Live Demo ↗
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Grid Projects */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/* Project 2 */}
+                <div onClick={() => onOpenProject('jobqueue')} className="bg-surface-card border border-surface-border rounded-lg p-6 flex flex-col justify-between hover:border-primary transition-all cursor-pointer group">
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-start">
+                      <span className="text-[11px] font-mono text-primary font-semibold uppercase">SYSTEMS / BACKEND</span>
+                      <span className="text-[11px] font-mono text-surface-subtleText">Go • Redis</span>
+                    </div>
+                    <h4 className="text-lg font-bold text-white group-hover:text-primary transition-colors">
+                      KiteQueue: Distributed Worker Engine
+                    </h4>
+                    <p className="text-xs text-surface-mutedText leading-relaxed">
+                      Lightweight distributed priority job queue in Go with at-least-once delivery guarantees, dead-letter queues, heartbeats, and exponential backoff retry algorithms.
+                    </p>
+                    <div className="space-y-1.5 text-xs font-mono text-gray-300 pt-2">
+                      <div className="flex items-center gap-1.5 text-[11px]">
+                        <span className="text-emerald-400 font-bold">✓</span> 50,000 tasks/sec throughput benchmarked
+                      </div>
+                      <div className="flex items-center gap-1.5 text-[11px]">
+                        <span className="text-emerald-400 font-bold">✓</span> Worker leader election with Redis leases
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="pt-5 mt-4 border-t border-surface-borderSubtle flex items-center justify-between">
+                    <div className="flex gap-1.5 flex-wrap">
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-canvas border border-surface-border text-gray-300">Golang</span>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-canvas border border-surface-border text-gray-300">Redis</span>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-canvas border border-surface-border text-gray-300">gRPC</span>
+                    </div>
+                    <span className="text-xs font-mono text-primary group-hover:translate-x-1 transition-transform">Details →</span>
+                  </div>
+                </div>
+
+                {/* Project 3 */}
+                <div onClick={() => onOpenProject('apigateway')} className="bg-surface-card border border-surface-border rounded-lg p-6 flex flex-col justify-between hover:border-primary transition-all cursor-pointer group">
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-start">
+                      <span className="text-[11px] font-mono text-primary font-semibold uppercase">FULL-STACK • DEV TOOLS</span>
+                      <span className="text-[11px] font-mono text-surface-subtleText">TypeScript • React</span>
+                    </div>
+                    <h4 className="text-lg font-bold text-white group-hover:text-primary transition-colors">
+                      PulseAPI: Schema Monitor &amp; Testing Hub
+                    </h4>
+                    <p className="text-xs text-surface-mutedText leading-relaxed">
+                      Full-stack developer platform that continuously scans GraphQL and OpenAPI endpoints for breaking schema changes, mocking synthetic payloads and issuing Slack webhooks.
+                    </p>
+                    <div className="space-y-1.5 text-xs font-mono text-gray-300 pt-2">
+                      <div className="flex items-center gap-1.5 text-[11px]">
+                        <span className="text-emerald-400 font-bold">✓</span> Automated breaking change diff detection
+                      </div>
+                      <div className="flex items-center gap-1.5 text-[11px]">
+                        <span className="text-emerald-400 font-bold">✓</span> Multi-tenant workspace RBAC &amp; API keys
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="pt-5 mt-4 border-t border-surface-borderSubtle flex items-center justify-between">
+                    <div className="flex gap-1.5 flex-wrap">
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-canvas border border-surface-border text-gray-300">React</span>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-canvas border border-surface-border text-gray-300">Node.js</span>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-canvas border border-surface-border text-gray-300">PostgreSQL</span>
+                    </div>
+                    <span className="text-xs font-mono text-primary group-hover:translate-x-1 transition-transform">Details →</span>
+                  </div>
+                </div>
+
+                {/* Project 4 */}
+                <div onClick={() => onOpenProject('vectoreval')} className="bg-surface-card border border-surface-border rounded-lg p-6 flex flex-col justify-between hover:border-primary transition-all cursor-pointer group">
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-start">
+                      <span className="text-[11px] font-mono text-primary font-semibold uppercase">AI / ML INFRA</span>
+                      <span className="text-[11px] font-mono text-surface-subtleText">Python • ChromaDB</span>
+                    </div>
+                    <h4 className="text-lg font-bold text-white group-hover:text-primary transition-colors">
+                      VectorBench: Embedding Model Profiler
+                    </h4>
+                    <p className="text-xs text-surface-mutedText leading-relaxed">
+                      Empirical evaluation harness comparing cosine distance vs inner product performance across 8 open-source embedding models on legal and biomedical text corpuses.
+                    </p>
+                    <div className="space-y-1.5 text-xs font-mono text-gray-300 pt-2">
+                      <div className="flex items-center gap-1.5 text-[11px]">
+                        <span className="text-emerald-400 font-bold">✓</span> Memory usage vs recall curve visualization
+                      </div>
+                      <div className="flex items-center gap-1.5 text-[11px]">
+                        <span className="text-emerald-400 font-bold">✓</span> Automated dataset synthetic augmentation
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="pt-5 mt-4 border-t border-surface-borderSubtle flex items-center justify-between">
+                    <div className="flex gap-1.5 flex-wrap">
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-canvas border border-surface-border text-gray-300">Python</span>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-canvas border border-surface-border text-gray-300">PyTorch</span>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-canvas border border-surface-border text-gray-300">FastAPI</span>
+                    </div>
+                    <span className="text-xs font-mono text-primary group-hover:translate-x-1 transition-transform">Details →</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* SKILLS */}
+          <section id="skills" className="py-16 md:py-20 border-b border-surface-border bg-surface-canvas">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="font-mono text-xs text-primary font-semibold tracking-wider uppercase">04 // TECHNICAL SKILLS</span>
+                <div className="h-px bg-surface-border flex-grow"></div>
+              </div>
+              <p className="text-xs font-mono text-surface-mutedText mb-8">
+                Only technologies and patterns I have implemented in production or extensive projects and can defend technically in interviews.
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[
+                  { num: '01', title: 'Languages', skills: ['TypeScript', 'JavaScript (ES6+)', 'Python 3', 'Go (Golang)', 'Java (Spring)', 'SQL (ANSI/Postgres)', 'C++ (Academic)'] },
+                  { num: '02', title: 'Backend & APIs', skills: ['Node.js', 'Express.js', 'FastAPI', 'RESTful Architecture', 'gRPC & Protobuf', 'Server-Sent Events (SSE)', 'JWT / OAuth 2.0'] },
+                  { num: '03', title: 'Databases & Caching', skills: ['PostgreSQL', 'Redis (Pub/Sub & Cache)', 'MongoDB', 'pgvector', 'Prisma / Drizzle ORM', 'ACID Transactions'] },
+                  { num: '04', title: 'AI & Applied ML', skills: ['RAG Pipelines', 'Vector Embeddings (HNSW)', 'LangChain & LlamaIndex', 'OpenAI & Claude APIs', 'Prompt Engineering', 'HuggingFace'] },
+                  { num: '05', title: 'Frontend Engineering', skills: ['React 18', 'Next.js / SSR', 'Tailwind CSS', 'Vite', 'Zustand / TanStack Query', 'Accessible HTML (a11y)'] },
+                  { num: '06', title: 'Tools & DevOps', skills: ['Git / GitHub Workflows', 'Docker Builds', 'Linux / Bash', 'AWS (S3, EC2, Lambda)', 'CI/CD GitHub Actions', 'Nginx Reverse Proxy'] },
+                ].map((cat, idx) => (
+                  <div key={idx} className="bg-surface-card border border-surface-border rounded-lg p-5 space-y-3">
+                    <div className="flex items-center gap-2 border-b border-surface-borderSubtle pb-2.5">
+                      <span className="text-primary font-mono text-sm font-bold">{cat.num}.</span>
+                      <h3 className="text-sm font-semibold text-white uppercase tracking-wider font-mono">{cat.title}</h3>
+                    </div>
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      {cat.skills.map((s, i) => (
+                        <span key={i} className="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded-md text-gray-200">
+                          {s}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* EDUCATION & ACHIEVEMENTS */}
+          <section id="education" className="py-16 md:py-20 border-b border-surface-border">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                
+                <div className="lg:col-span-5 space-y-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="font-mono text-xs text-primary font-semibold tracking-wider uppercase">05 // EDUCATION</span>
+                  </div>
+                  
+                  <div className="bg-surface-card border border-surface-border rounded-lg p-6 space-y-4">
+                    <div>
+                      <h3 className="text-lg font-bold text-white tracking-tight">Bachelor of Science in Computer Science</h3>
+                      <p className="text-sm text-primary font-medium font-mono">California State University, Long Beach</p>
+                      <p className="text-xs text-surface-mutedText font-mono mt-1">Expected Graduation: May 2025 • GPA: 3.91 / 4.00 (Dean's List)</p>
+                    </div>
+
+                    <div className="pt-3 border-t border-surface-borderSubtle">
+                      <span className="text-xs font-mono uppercase text-gray-400 block mb-2 font-medium">Relevant Rigorous Coursework:</span>
+                      <div className="grid grid-cols-2 gap-1.5 text-xs text-surface-mutedText font-mono">
+                        <span>• Distributed Systems</span>
+                        <span>• Database Architectures</span>
+                        <span>• Algorithms &amp; Complexity</span>
+                        <span>• Operating Systems</span>
+                        <span>• Software Architecture</span>
+                        <span>• Artificial Intelligence</span>
+                        <span>• Computer Networks</span>
+                        <span>• Object-Oriented Design</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="lg:col-span-7 space-y-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="font-mono text-xs text-primary font-semibold tracking-wider uppercase">06 // ACHIEVEMENTS &amp; INITIATIVE</span>
+                  </div>
+
+                  <div className="bg-surface-card border border-surface-border rounded-lg p-6 space-y-4">
+                    <div className="flex items-start gap-3 border-b border-surface-borderSubtle pb-3.5">
+                      <span className="text-primary font-mono font-bold text-xs mt-0.5">[01]</span>
+                      <div className="space-y-0.5">
+                        <h4 className="text-sm font-semibold text-white">1st Place Overall — HackTech Collegiate Hackathon (2024)</h4>
+                        <p className="text-xs text-surface-mutedText leading-relaxed">
+                          Designed an offline-first mesh communications dispatch system during disaster scenarios using WebRTC and local SQLite synchronization. Outperformed 72 competing student teams.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3 border-b border-surface-borderSubtle pb-3.5">
+                      <span className="text-primary font-mono font-bold text-xs mt-0.5">[02]</span>
+                      <div className="space-y-0.5">
+                        <h4 className="text-sm font-semibold text-white">Lead Technical Organizer — ACM Student Chapter</h4>
+                        <p className="text-xs text-surface-mutedText leading-relaxed">
+                          Curated and instructed 6 hands-on workshops on backend systems, Git collaboration, and Docker fundamentals attended by 120+ collegiate CS underclassmen.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <span className="text-primary font-mono font-bold text-xs mt-0.5">[03]</span>
+                      <div className="space-y-0.5">
+                        <h4 className="text-sm font-semibold text-white">Open Source Contributor — FastStream &amp; LangChain Docs</h4>
+                        <p className="text-xs text-surface-mutedText leading-relaxed">
+                          Submitted merged bug fixes for asynchronous Redis consumer reconnect logic and authored comprehensive documentation examples on pgvector chunk reranking.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </section>
+
+          {/* NEXT STEPS CALLOUT */}
+          <section className="py-14 border-b border-surface-border bg-gradient-to-b from-surface-canvas to-surface-card">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+              <span className="inline-block font-mono text-xs text-primary uppercase tracking-widest font-semibold">
+                NEXT STEPS FOR RECRUITERS &amp; HIRING MANAGERS
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                Interested in evaluating my engineering fit for your team?
+              </h2>
+              <p className="text-sm text-surface-mutedText max-w-xl mx-auto leading-relaxed">
+                I am actively interviewing for 2025 Full-Time Software Engineering (New Grad), Backend, Full-Stack, and AI Systems roles. Available for on-site or remote arrangements.
+              </p>
+              <div className="flex flex-wrap justify-center items-center gap-4 pt-2">
+                <button onClick={onOpenResume} className="px-6 py-3 rounded-lg bg-primary hover:bg-primary-600 text-white text-sm font-mono font-medium transition-colors inline-flex items-center gap-2 shadow-md">
+                  <span className="material-symbols-outlined text-sm">download</span>
+                  <span>View Complete Resume (PDF)</span>
+                </button>
+                <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="px-5 py-3 rounded-lg bg-surface-card border border-surface-border hover:border-gray-500 text-gray-200 text-sm font-mono transition-colors">
+                  Inspect GitHub Repos
+                </a>
+                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="px-5 py-3 rounded-lg bg-surface-card border border-surface-border hover:border-gray-500 text-gray-200 text-sm font-mono transition-colors">
+                  Connect on LinkedIn
+                </a>
+              </div>
+            </div>
+          </section>
+
+          {/* CONTACT */}
+          <ContactSection isParchmentMode={false} />
+        </div>
+      );
+    }
+
+    // ==========================================
+    // SCREEN 2: EDITORIAL PARCHMENT STYLED VIEW
+    // ==========================================
+    function ParchmentPortfolioScreen({ onOpenProject, onOpenResume }) {
+      return (
+        <div className="bg-[#fbfbf9] text-[#141416] min-h-screen" style={{ backgroundImage: 'radial-gradient(#d8d4c9 0.75px, transparent 0.75px)', backgroundSize: '24px 24px' }}>
+          
+          {/* HERO */}
+          <section id="hero" className="relative pt-12 pb-16 md:pt-20 md:pb-24 border-b border-[#e2ded5] overflow-hidden">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+                
+                <div className="lg:col-span-7 space-y-6">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#dcd8cf] bg-white text-[12px] font-mono font-medium text-primary shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+                    <span className="w-2 h-2 rounded-full bg-[#2e5a44]"></span>
+                    <span>SOFTWARE ENGINEER • FULL-STACK • BACKEND &amp; AI</span>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[#141416] leading-tight">
+                      Alex Rivera
+                    </h1>
+                    <p className="text-xl sm:text-2xl text-[#3b3a36] font-medium leading-snug">
+                      Building reliable software, scalable backend APIs, and production AI-powered systems.
+                    </p>
+                  </div>
+
+                  <p className="text-base text-[#575653] leading-relaxed max-w-2xl font-normal">
+                    Final-year Computer Science Engineering student at California State University. Focused on engineering resilient distributed backends, robust full-stack web platforms, and retrieval-augmented (RAG) AI architectures using TypeScript, Python, PostgreSQL, and Go.
+                  </p>
+
+                  <div className="pt-2 flex flex-wrap items-center gap-4">
+                    <a href="#projects" className="px-5 py-2.5 rounded-lg bg-[#141416] hover:bg-[#2c2b30] text-white text-sm font-medium transition-colors inline-flex items-center gap-2 shadow-sm font-mono">
+                      <span>View Engineered Projects</span>
+                      <span className="material-symbols-outlined text-sm text-[#e2ded5]">arrow_downward</span>
+                    </a>
+                    <button onClick={onOpenResume} className="px-5 py-2.5 rounded-lg border border-[#cac5b9] hover:border-[#141416] text-[#2c2b30] hover:text-[#141416] bg-white hover:bg-[#f5f4f0] text-sm font-medium transition-all inline-flex items-center gap-2 font-mono shadow-sm">
+                      <span className="material-symbols-outlined text-sm text-primary">description</span>
+                      <span>Read Resume / CV</span>
+                    </button>
+                  </div>
+
+                  <div className="pt-2 flex items-center gap-5 text-xs font-mono text-[#6c6962]">
+                    <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary flex items-center gap-1.5 transition-colors">
+                      <span className="material-symbols-outlined text-sm">code</span>
+                      <span>github.com/alexrivera</span>
+                    </a>
+                    <span className="text-[#dcd8cf]">•</span>
+                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary flex items-center gap-1.5 transition-colors">
+                      <span className="material-symbols-outlined text-sm">share</span>
+                      <span>linkedin.com/in/alexrivera-cs</span>
+                    </a>
+                    <span className="text-[#dcd8cf]">•</span>
+                    <a href="mailto:alex.rivera.dev@gmail.com" className="hover:text-primary flex items-center gap-1.5 transition-colors">
+                      <span className="material-symbols-outlined text-sm">mail</span>
+                      <span>alex.rivera.dev@gmail.com</span>
+                    </a>
+                  </div>
+                </div>
+
+                <div className="lg:col-span-5">
+                  <div className="bg-white border border-[#dcd8cf] rounded-lg p-5 sm:p-6 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.06)] space-y-4">
+                    <div className="flex items-center justify-between border-b border-[#ece8de] pb-3">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#d65d49]"></span>
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#d4973b]"></span>
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#2e5a44]"></span>
+                        <span className="text-xs font-mono text-[#78756e] ml-2">rivera_dev_env.sh</span>
+                      </div>
+                      <span className="text-[11px] font-mono text-[#2e5a44] bg-[#edf4f0] px-2.5 py-0.5 rounded-md font-medium border border-[#c3d8cd]">Status: Active</span>
+                    </div>
+
+                    <div className="space-y-2.5 font-mono text-xs">
+                      <div className="flex justify-between items-center py-1.5 border-b border-[#f3efe6]">
+                        <span className="text-[#78756e]">Graduation:</span>
+                        <span className="text-[#141416] font-semibold">May 2025 (B.S. CS, Honors)</span>
+                      </div>
+                      <div className="flex justify-between items-center py-1.5 border-b border-[#f3efe6]">
+                        <span className="text-[#78756e]">Target Roles:</span>
+                        <span className="text-primary font-semibold">SWE • Full-Stack • Backend • AI/ML</span>
+                      </div>
+                      <div className="flex justify-between items-center py-1.5 border-b border-[#f3efe6]">
+                        <span className="text-[#78756e]">Primary Languages:</span>
+                        <span className="text-[#2c2b30] font-medium">TypeScript, Python, Go, Java, SQL</span>
+                      </div>
+                      <div className="flex justify-between items-center py-1.5 border-b border-[#f3efe6]">
+                        <span className="text-[#78756e]">Core Stack:</span>
+                        <span className="text-[#2c2b30] font-medium">React, Node/FastAPI, Postgres, Docker</span>
+                      </div>
+                      <div className="flex justify-between items-center py-1.5 border-b border-[#f3efe6]">
+                        <span className="text-[#78756e]">Location / Auth:</span>
+                        <span className="text-[#2c2b30] font-medium">US Citizen • San Francisco / Remote</span>
+                      </div>
+                    </div>
+
+                    <div className="p-3.5 bg-[#f5f4f0] rounded-lg border border-[#e2ded5] font-mono text-[11px] space-y-1.5">
+                      <div className="flex items-center justify-between text-[#575653]">
+                        <span>SYSTEM_LOAD: 0.14</span>
+                        <span className="font-semibold text-[#141416]">TEST_COVERAGE: 88.4%</span>
+                      </div>
+                      <div className="w-full bg-[#ded9cd] h-1.5 rounded-full overflow-hidden">
+                        <div className="h-full w-[88%] bg-primary"></div>
+                      </div>
+                      <p className="text-[#78756e] pt-1">
+                        &gt; Ready for summer/fall 2025 full-time software engineering roles.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </section>
+
+          {/* RECRUITER SUMMARY BANNER */}
+          <section className="border-b border-[#e2ded5] bg-[#f5f4f0]/80 py-4">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 text-center">
+                <div className="border-r border-[#e2ded5] last:border-none px-2">
+                  <span className="block text-xs font-mono text-[#78756e]">ACADEMIC</span>
+                  <span className="text-sm font-semibold text-[#141416]">B.S. CS '25 (3.9 GPA)</span>
+                </div>
+                <div className="border-r border-[#e2ded5] last:border-none px-2">
+                  <span className="block text-xs font-mono text-[#78756e]">EXPERIENCE</span>
+                  <span className="text-sm font-semibold text-[#141416]">2 SWE Internships</span>
+                </div>
+                <div className="border-r border-[#e2ded5] last:border-none px-2">
+                  <span className="block text-xs font-mono text-[#78756e]">PRODUCTION APPS</span>
+                  <span className="text-sm font-semibold text-[#141416]">100K+ Req/Day Handled</span>
+                </div>
+                <div className="border-r border-[#e2ded5] last:border-none px-2">
+                  <span className="block text-xs font-mono text-[#78756e]">SYSTEM FOCUS</span>
+                  <span className="text-sm font-semibold text-[#141416]">Distributed &amp; RAG AI</span>
+                </div>
+                <div className="col-span-2 sm:col-span-1 px-2 flex flex-col justify-center items-center">
+                  <span className="inline-flex items-center gap-1.5 text-xs font-mono text-[#2e5a44] font-semibold bg-[#edf4f0] px-2.5 py-1 rounded-md border border-[#c3d8cd]">
+                    <span className="w-2 h-2 rounded-full bg-[#2e5a44]"></span>
+                    Interview Ready
+                  </span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ABOUT */}
+          <section id="about" className="py-16 md:py-20 border-b border-[#e2ded5]">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center gap-3 mb-10">
+                <span className="font-mono text-xs text-primary font-semibold tracking-wider uppercase">01 // PROFILE</span>
+                <div className="h-px bg-[#e2ded5] flex-grow"></div>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                <div className="lg:col-span-6 space-y-5">
+                  <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#141416]">
+                    Engineering with pragmatism, rigor, and depth.
+                  </h2>
+                  <p className="text-[#575653] leading-relaxed">
+                    I am a software engineer graduating in May 2025 with hands-on experience building web systems that need to be both reliable under load and clean to maintain. Rather than viewing engineering solely as writing code, I treat it as designing end-to-end solutions that solve tangible business problems.
+                  </p>
+                  <p className="text-[#575653] leading-relaxed">
+                    During my internships at cloud infrastructure and fintech companies, I owned production API endpoints, optimized complex database queries, and implemented LLM-driven pipelines with strict latency guarantees.
+                  </p>
+
+                  <div className="pt-2">
+                    <h3 className="text-xs font-mono font-semibold text-[#2c2b30] uppercase tracking-wider mb-3">
+                      Core Domains of Focus:
+                    </h3>
+                    <div className="grid grid-cols-2 gap-2.5 text-xs font-mono">
+                      <div className="p-2.5 rounded-lg bg-white border border-[#e2ded5] text-[#2c2b30] shadow-sm">
+                        <span className="text-primary font-bold mr-1">&gt;</span> Distributed Services
+                      </div>
+                      <div className="p-2.5 rounded-lg bg-white border border-[#e2ded5] text-[#2c2b30] shadow-sm">
+                        <span className="text-primary font-bold mr-1">&gt;</span> Full-Stack Web
+                      </div>
+                      <div className="p-2.5 rounded-lg bg-white border border-[#e2ded5] text-[#2c2b30] shadow-sm">
+                        <span className="text-primary font-bold mr-1">&gt;</span> RAG &amp; Vector AI
+                      </div>
+                      <div className="p-2.5 rounded-lg bg-white border border-[#e2ded5] text-[#2c2b30] shadow-sm">
+                        <span className="text-primary font-bold mr-1">&gt;</span> Schema Caching
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="lg:col-span-6 bg-white border border-[#e2ded5] rounded-lg p-6 sm:p-7 space-y-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+                  <h3 className="text-lg font-semibold text-[#141416] flex items-center gap-2">
+                    <span className="material-symbols-outlined text-primary">verified</span>
+                    <span>Engineering Values &amp; Practices</span>
+                  </h3>
+
+                  <div className="space-y-4 text-sm">
+                    <div className="border-l-2 border-primary pl-4 space-y-1">
+                      <span className="font-medium text-[#141416] block">Understand Foundations Over Black Boxes</span>
+                      <p className="text-[#575653] text-xs leading-relaxed">
+                        I don't just import packages blindly; I examine how query planners work, how network protocols handle handshakes, and why memory leaks occur in Node/V8 runtimes.
+                      </p>
+                    </div>
+
+                    <div className="border-l-2 border-[#dcd8cf] pl-4 space-y-1">
+                      <span className="font-medium text-[#141416] block">Resilience, Observability &amp; Testing</span>
+                      <p className="text-[#575653] text-xs leading-relaxed">
+                        Code isn't finished when it works on localhost. I structure codebases with unit/integration testing (Jest, PyTest), structured logging, and idempotent API contracts.
+                      </p>
+                    </div>
+
+                    <div className="border-l-2 border-[#dcd8cf] pl-4 space-y-1">
+                      <span className="font-medium text-[#141416] block">Fast Feedback &amp; Shippable Iteration</span>
+                      <p className="text-[#575653] text-xs leading-relaxed">
+                        I favor building minimum viable architectures that deploy quickly, gather real metrics, and scale iteratively based on empirical bottlenecks rather than premature speculation.
+                      </p>
+                    </div>
+
+                    <div className="border-l-2 border-[#dcd8cf] pl-4 space-y-1">
+                      <span className="font-medium text-[#141416] block">Empathetic Team Collaboration</span>
+                      <p className="text-[#575653] text-xs leading-relaxed">
+                        Clear PR writeups, thorough documentation, constructive code reviews, and communicative asynchronous updates are non-negotiable standards in my workflow.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* EXPERIENCE */}
+          <section id="experience" className="py-16 md:py-20 border-b border-[#e2ded5] bg-[#fbfbf9]">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center gap-3 mb-12">
+                <span className="font-mono text-xs text-primary font-semibold tracking-wider uppercase">02 // WORK EXPERIENCE</span>
+                <div className="h-px bg-[#e2ded5] flex-grow"></div>
+              </div>
+
+              <div className="space-y-8">
+                <div className="bg-white border border-[#e2ded5] rounded-lg p-6 sm:p-8 hover:border-[#cac5b9] shadow-[0_1px_4px_rgba(0,0,0,0.03)] transition-all">
+                  <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-b border-[#f0ede6] pb-4 mb-5">
+                    <div>
+                      <h3 className="text-xl font-bold text-[#141416] tracking-tight">Software Engineering Intern</h3>
+                      <div className="text-sm text-primary font-medium font-mono mt-0.5">ScaleCloud Infrastructure Labs • San Francisco, CA</div>
+                    </div>
+                    <div className="text-xs font-mono text-[#6c6962] bg-[#f5f4f0] px-3 py-1 rounded-lg border border-[#e2ded5]">
+                      June 2024 — August 2024 (Summer)
+                    </div>
+                  </div>
+
+                  <ul className="space-y-2.5 text-sm text-[#575653] mb-6">
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary font-mono text-xs mt-1">&gt;</span>
+                      <span>Designed and deployed an automated telemetry ingestion microservice in <strong className="text-[#141416]">Go</strong> and <strong className="text-[#141416]">PostgreSQL</strong> processing over <strong className="text-[#141416]">1.2 million log events/day</strong> from edge nodes.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary font-mono text-xs mt-1">&gt;</span>
+                      <span>Optimized SQL analytical queries by indexing partition tables and restructuring joining logic, decreasing 95th percentile dashboard query latency from <strong className="text-[#141416]">840ms to 92ms</strong>.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary font-mono text-xs mt-1">&gt;</span>
+                      <span>Engineered robust rate-limiting middleware using <strong className="text-[#141416]">Redis token bucket algorithms</strong> to protect internal endpoints against denial-of-service traffic spikes.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary font-mono text-xs mt-1">&gt;</span>
+                      <span>Authored comprehensive unit and integration test suites with 89% coverage and integrated them into GitHub Actions CI/CD pipelines.</span>
+                    </li>
+                  </ul>
+
+                  <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-[#f0ede6]">
+                    <span className="text-xs font-mono text-[#78756e] mr-2">Stack:</span>
+                    {['Go (Golang)', 'PostgreSQL', 'Redis', 'Docker', 'GitHub Actions'].map((t, idx) => (
+                      <span key={idx} className="px-2.5 py-0.5 text-xs font-mono bg-[#f5f4f0] border border-[#e2ded5] rounded-md text-[#2c2b30]">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="bg-white border border-[#e2ded5] rounded-lg p-6 sm:p-8 hover:border-[#cac5b9] shadow-[0_1px_4px_rgba(0,0,0,0.03)] transition-all">
+                  <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-b border-[#f0ede6] pb-4 mb-5">
+                    <div>
+                      <h3 className="text-xl font-bold text-[#141416] tracking-tight">Full-Stack Developer Intern</h3>
+                      <div className="text-sm text-primary font-medium font-mono mt-0.5">Vanguard Financial Analytics • Remote</div>
+                    </div>
+                    <div className="text-xs font-mono text-[#6c6962] bg-[#f5f4f0] px-3 py-1 rounded-lg border border-[#e2ded5]">
+                      June 2023 — August 2023 (Summer)
+                    </div>
+                  </div>
+
+                  <ul className="space-y-2.5 text-sm text-[#575653] mb-6">
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary font-mono text-xs mt-1">&gt;</span>
+                      <span>Built client-facing portfolio rebalancing views using <strong className="text-[#141416]">React, TypeScript, and Tailwind CSS</strong>, serving 14,000+ active retail investors.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary font-mono text-xs mt-1">&gt;</span>
+                      <span>Integrated RESTful microservices with <strong className="text-[#141416]">Node.js / Express</strong> and structured JWT-based role-based access control (RBAC) with strict CSRF protection.</span>
+                    </li>
+                  </ul>
+
+                  <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-[#f0ede6]">
+                    <span className="text-xs font-mono text-[#78756e] mr-2">Stack:</span>
+                    {['TypeScript', 'React', 'Node.js', 'Express', 'REST APIs'].map((t, idx) => (
+                      <span key={idx} className="px-2.5 py-0.5 text-xs font-mono bg-[#f5f4f0] border border-[#e2ded5] rounded-md text-[#2c2b30]">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* PROJECTS */}
+          <section id="projects" className="py-16 md:py-20 border-b border-[#e2ded5]">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center justify-between mb-4">
+                <span className="font-mono text-xs text-primary font-semibold tracking-wider uppercase">03 // SELECTED TECHNICAL WORK</span>
+                <span className="text-xs font-mono text-[#78756e] hidden sm:inline">Click any project card to inspect architecture modal</span>
+              </div>
+              <div className="h-px bg-[#e2ded5] mb-10"></div>
+
+              {/* Featured Case Study */}
+              <div className="mb-10 bg-white border border-[#dcd8cf] rounded-lg p-6 sm:p-8 lg:p-10 shadow-sm relative group hover:border-[#cac5b9] transition-all">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                  <div className="lg:col-span-8 space-y-4">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2.5 py-0.5 text-[11px] font-mono uppercase bg-[#ffedd5] text-primary rounded-md border border-[#fed7aa] font-semibold">Featured Case Study</span>
+                      <span className="text-xs font-mono text-[#78756e]">Production Ready</span>
+                    </div>
+
+                    <div>
+                      <h3 className="text-2xl sm:text-3xl font-bold text-[#141416] tracking-tight">
+                        NexusRAG: Distributed Enterprise Knowledge Agent
+                      </h3>
+                      <p className="text-sm font-mono text-primary mt-1 font-medium">High-Throughput Retrieval-Augmented Generation Platform with Citation Verification</p>
+                    </div>
+
+                    <div className="space-y-2 text-sm text-[#575653]">
+                      <p>
+                        <strong className="text-[#141416] font-semibold">The Engineering Problem:</strong> Enterprise documentation queries suffered from high hallucinations and slow semantic retrieval across millions of dense technical PDF tokens.
+                      </p>
+                      <p>
+                        <strong className="text-[#141416] font-semibold">Technical Implementation:</strong> Built an asynchronous pipeline in <strong className="text-[#141416]">FastAPI and Python</strong> leveraging <strong className="text-[#141416]">pgvector (PostgreSQL)</strong> for HNSW indexing, <strong className="text-[#141416]">OpenAI embeddings</strong>, and <strong className="text-[#141416]">LangChain</strong> orchestration. Implemented hybrid reciprocal rank fusion delivering sub-250ms query responses.
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs font-mono text-[#2c2b30] pt-1">
+                      <div className="flex items-center gap-2 bg-[#f5f4f0] p-2.5 rounded-lg border border-[#e2ded5]">
+                        <span className="text-primary font-bold">•</span>
+                        <span>Hybrid Semantic + BM25 Search</span>
+                      </div>
+                      <div className="flex items-center gap-2 bg-[#f5f4f0] p-2.5 rounded-lg border border-[#e2ded5]">
+                        <span className="text-primary font-bold">•</span>
+                        <span>Streaming SSE Response Tokenizer</span>
+                      </div>
+                      <div className="flex items-center gap-2 bg-[#f5f4f0] p-2.5 rounded-lg border border-[#e2ded5]">
+                        <span className="text-primary font-bold">•</span>
+                        <span>Celery + Redis Background Workers</span>
+                      </div>
+                      <div className="flex items-center gap-2 bg-[#f5f4f0] p-2.5 rounded-lg border border-[#e2ded5]">
+                        <span className="text-primary font-bold">•</span>
+                        <span>Strict Token-Budget Caching Layer</span>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2 pt-3">
+                      {['Python 3.11', 'FastAPI', 'PostgreSQL (pgvector)', 'LangChain', 'Redis', 'Docker'].map((tag, idx) => (
+                        <span key={idx} className="px-2.5 py-1 text-xs font-mono bg-[#f5f4f0] border border-[#e2ded5] rounded-md text-[#2c2b30]">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="lg:col-span-4 bg-[#f5f4f0] border border-[#e2ded5] rounded-lg p-5 space-y-5">
+                    <div className="space-y-3 font-mono text-xs">
+                      <div className="text-[#2c2b30] font-semibold uppercase tracking-wider text-[11px] pb-1 border-b border-[#e2ded5]">
+                        Benchmark Metrics
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-[#78756e]">Median Query Time:</span>
+                        <span className="text-[#2e5a44] font-bold">185ms</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-[#78756e]">Indexing Throughput:</span>
+                        <span className="text-[#141416] font-semibold">1,200 chunks/min</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-[#78756e]">Citation Precision:</span>
+                        <span className="text-[#141416] font-semibold">96.4%</span>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2 pt-2">
+                      <button onClick={() => onOpenProject('nexusrag')} className="w-full py-2.5 rounded-lg bg-[#141416] hover:bg-[#2c2b30] text-white text-xs font-mono font-medium transition-colors flex items-center justify-center gap-2 shadow-sm">
+                        <span className="material-symbols-outlined text-sm">visibility</span>
+                        <span>Open Architecture Modal</span>
+                      </button>
+                      <div className="flex gap-2">
+                        <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="flex-1 py-2 text-center text-xs font-mono rounded-lg bg-white border border-[#e2ded5] hover:border-[#141416] text-[#2c2b30] transition-colors shadow-sm">
+                          GitHub Code
+                        </a>
+                        <a href="https://demo-service.com" target="_blank" rel="noopener noreferrer" className="flex-1 py-2 text-center text-xs font-mono rounded-lg bg-[#fff7ed] border border-[#fed7aa] text-primary font-medium transition-colors">
+                          Live Demo ↗
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div onClick={() => onOpenProject('jobqueue')} className="bg-white border border-[#e2ded5] rounded-lg p-6 flex flex-col justify-between hover:border-[#cac5b9] shadow-sm transition-all cursor-pointer group">
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-start">
+                      <span className="text-[11px] font-mono text-primary font-semibold uppercase">SYSTEMS / BACKEND</span>
+                      <span className="text-[11px] font-mono text-[#78756e]">Go • Redis</span>
+                    </div>
+                    <h4 className="text-lg font-bold text-[#141416] group-hover:text-primary transition-colors">
+                      KiteQueue: Distributed Worker Engine
+                    </h4>
+                    <p className="text-xs text-[#575653] leading-relaxed">
+                      Lightweight distributed priority job queue in Go with at-least-once delivery guarantees, dead-letter queues, and backoff retries.
+                    </p>
+                    <div className="space-y-1.5 text-xs font-mono text-[#2c2b30] pt-2">
+                      <div className="flex items-center gap-1.5 text-[11px]">
+                        <span className="text-[#2e5a44] font-bold">✓</span> 50,000 tasks/sec throughput benchmarked
+                      </div>
+                    </div>
+                  </div>
+                  <div className="pt-5 mt-4 border-t border-[#f0ede6] flex items-center justify-between">
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#f5f4f0] border border-[#e2ded5] text-[#2c2b30]">Golang</span>
+                    <span className="text-xs font-mono font-medium text-primary group-hover:translate-x-1 transition-transform">Details →</span>
+                  </div>
+                </div>
+
+                <div onClick={() => onOpenProject('apigateway')} className="bg-white border border-[#e2ded5] rounded-lg p-6 flex flex-col justify-between hover:border-[#cac5b9] shadow-sm transition-all cursor-pointer group">
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-start">
+                      <span className="text-[11px] font-mono text-primary font-semibold uppercase">FULL-STACK • DEV TOOLS</span>
+                      <span className="text-[11px] font-mono text-[#78756e]">TypeScript • React</span>
+                    </div>
+                    <h4 className="text-lg font-bold text-[#141416] group-hover:text-primary transition-colors">
+                      PulseAPI: Schema Monitor &amp; Testing Hub
+                    </h4>
+                    <p className="text-xs text-[#575653] leading-relaxed">
+                      Full-stack developer platform that continuously scans GraphQL and OpenAPI endpoints for breaking schema changes.
+                    </p>
+                    <div className="space-y-1.5 text-xs font-mono text-[#2c2b30] pt-2">
+                      <div className="flex items-center gap-1.5 text-[11px]">
+                        <span className="text-[#2e5a44] font-bold">✓</span> Automated breaking change diff detection
+                      </div>
+                    </div>
+                  </div>
+                  <div className="pt-5 mt-4 border-t border-[#f0ede6] flex items-center justify-between">
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#f5f4f0] border border-[#e2ded5] text-[#2c2b30]">React</span>
+                    <span className="text-xs font-mono font-medium text-primary group-hover:translate-x-1 transition-transform">Details →</span>
+                  </div>
+                </div>
+
+                <div onClick={() => onOpenProject('vectoreval')} className="bg-white border border-[#e2ded5] rounded-lg p-6 flex flex-col justify-between hover:border-[#cac5b9] shadow-sm transition-all cursor-pointer group">
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-start">
+                      <span className="text-[11px] font-mono text-primary font-semibold uppercase">AI / ML INFRA</span>
+                      <span className="text-[11px] font-mono text-[#78756e]">Python • ChromaDB</span>
+                    </div>
+                    <h4 className="text-lg font-bold text-[#141416] group-hover:text-primary transition-colors">
+                      VectorBench: Embedding Model Profiler
+                    </h4>
+                    <p className="text-xs text-[#575653] leading-relaxed">
+                      Empirical evaluation harness comparing cosine distance vs inner product performance across 8 open-source embedding models.
+                    </p>
+                    <div className="space-y-1.5 text-xs font-mono text-[#2c2b30] pt-2">
+                      <div className="flex items-center gap-1.5 text-[11px]">
+                        <span className="text-[#2e5a44] font-bold">✓</span> Memory usage vs recall curve visualization
+                      </div>
+                    </div>
+                  </div>
+                  <div className="pt-5 mt-4 border-t border-[#f0ede6] flex items-center justify-between">
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#f5f4f0] border border-[#e2ded5] text-[#2c2b30]">Python</span>
+                    <span className="text-xs font-mono font-medium text-primary group-hover:translate-x-1 transition-transform">Details →</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* CONTACT */}
+          <ContactSection isParchmentMode={true} />
+        </div>
+      );
+    }
+
+    // ==========================================
+    // MAIN APP WRAPPER WITH ROUTER
+    // ==========================================
+    function App() {
+      const [activeModalProject, setActiveModalProject] = useState(null);
+      const [isResumeOpen, setIsResumeOpen] = useState(false);
+      const location = useLocation();
+
+      const isParchment = location.pathname === '/parchment';
+
+      const handleOpenProject = (id) => {
+        if (projectDetails[id]) {
+          setActiveModalProject(projectDetails[id]);
+        }
+      };
+
+      const handleCloseModals = () => {
+        setActiveModalProject(null);
+        setIsResumeOpen(false);
+      };
+
+      // Keyboard Esc to dismiss
+      useEffect(() => {
+        const handleKeyDown = (e) => {
+          if (e.key === 'Escape') {
+            handleCloseModals();
+          }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+      }, []);
+
+      return (
+        <div className="min-h-screen flex flex-col font-sans">
+          <Navbar 
+            isParchmentMode={isParchment} 
+            onOpenResume={() => setIsResumeOpen(true)} 
+          />
+
+          <main className="flex-grow">
+            <Routes>
+              <Route 
+                path="/" 
+                element={
+                  <DarkPortfolioScreen 
+                    onOpenProject={handleOpenProject} 
+                    onOpenResume={() => setIsResumeOpen(true)} 
+                  />
+                } 
+              />
+              <Route 
+                path="/parchment" 
+                element={
+                  <ParchmentPortfolioScreen 
+                    onOpenProject={handleOpenProject} 
+                    onOpenResume={() => setIsResumeOpen(true)} 
+                  />
+                } 
+              />
+            </Routes>
+          </main>
+
+          <Footer 
+            isParchmentMode={isParchment} 
+            onOpenResume={() => setIsResumeOpen(true)} 
+          />
+
+          {/* Modals */}
+          <ProjectModal 
+            project={activeModalProject} 
+            onClose={() => setActiveModalProject(null)} 
+          />
+          <ResumeModal 
+            isOpen={isResumeOpen} 
+            onClose={() => setIsResumeOpen(false)} 
+          />
+        </div>
+      );
+    }
+
+    // Mount application with MemoryRouter
+    const container = document.getElementById('root');
+    const root = createRoot(container);
+    root.render(
+      <MemoryRouter initialEntries={["/"]}>
+        <App />
+      </MemoryRouter>
+    );
+  </script>
+</body>
+</html>

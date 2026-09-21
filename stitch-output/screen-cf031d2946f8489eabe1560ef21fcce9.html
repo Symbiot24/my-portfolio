@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alex Rivera | Software & Systems Engineer</title>
+  <meta name="description" content="Portfolio of Alex Rivera, Final-Year Computer Science Engineering student specializing in full-stack applications, scalable backend systems, and AI/ML integrations.">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              500: '#0284c7', // restrained deep electric/slate cyan-blue
+              600: '#0369a1',
+              700: '#075985',
+              900: '#0c4a6e',
+            },
+            surface: {
+              canvas: '#0c0e12', // Deep neutral charcoal
+              card: '#13171f',
+              cardHover: '#181d27',
+              border: '#232a38',
+              borderSubtle: '#1d232f',
+              mutedText: '#8f9bb3',
+              subtleText: '#5d6980',
+              highlight: '#1e2433'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom scrollbar and accessibility */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0c0e12;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #232a38;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #333d52;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* Modal Backdrop Blur */
+    .modal-open {
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body class="bg-surface-canvas text-gray-100 font-sans antialiased selection:bg-brand-500 selection:text-white min-h-screen flex flex-col relative">
+
+  <!-- ==================== HEADER / NAVBAR ==================== -->
+  <header class="sticky top-0 z-40 w-full bg-surface-canvas/90 backdrop-blur-md border-b border-surface-border transition-all duration-200">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <!-- Logo / Name & Status -->
+      <a href="#hero" class="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-brand-500 rounded-md p-1">
+        <span class="w-8 h-8 rounded border border-surface-border bg-surface-card flex items-center justify-center font-mono font-bold text-sm text-brand-500 group-hover:border-brand-500 transition-colors">
+          AR
+        </span>
+        <div class="flex flex-col">
+          <span class="text-sm font-semibold tracking-tight text-white group-hover:text-brand-500 transition-colors">Alex Rivera</span>
+          <span class="text-[11px] font-mono text-surface-mutedText leading-none">cs.dev // b.tech'25</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <nav class="hidden md:flex items-center gap-7 text-sm font-medium text-surface-mutedText" aria-label="Main Navigation">
+        <a href="#about" class="hover:text-white transition-colors">About</a>
+        <a href="#experience" class="hover:text-white transition-colors">Experience</a>
+        <a href="#projects" class="hover:text-white transition-colors">Projects</a>
+        <a href="#skills" class="hover:text-white transition-colors">Skills</a>
+        <a href="#education" class="hover:text-white transition-colors">Education</a>
+        <a href="#contact" class="hover:text-white transition-colors">Contact</a>
+      </nav>
+
+      <!-- Quick Action / Resume CTA -->
+      <div class="hidden sm:flex items-center gap-3">
+        <button onclick="openResumeModal()" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded text-xs font-mono font-medium border border-surface-border hover:border-brand-500 text-gray-200 hover:text-white bg-surface-card hover:bg-surface-cardHover transition-all shadow-sm">
+          <svg class="w-3.5 h-3.5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+          <span>Resume.pdf</span>
+        </button>
+        <a href="#contact" class="inline-flex items-center px-3.5 py-1.5 rounded text-xs font-medium bg-brand-600 hover:bg-brand-500 text-white transition-colors shadow-sm font-mono">
+          Hire / Contact
+        </a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button id="mobileMenuBtn" aria-label="Toggle Navigation Menu" class="md:hidden p-2 rounded text-surface-mutedText hover:text-white hover:bg-surface-card border border-surface-border">
+        <svg id="hamburgerIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+        <svg id="closeIcon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Drawer Menu -->
+    <div id="mobileMenu" class="hidden md:hidden border-b border-surface-border bg-surface-card/98 px-6 py-4 space-y-3">
+      <a href="#about" class="block text-sm py-1.5 text-surface-mutedText hover:text-white font-medium" onclick="toggleMobileMenu()">About</a>
+      <a href="#experience" class="block text-sm py-1.5 text-surface-mutedText hover:text-white font-medium" onclick="toggleMobileMenu()">Experience</a>
+      <a href="#projects" class="block text-sm py-1.5 text-surface-mutedText hover:text-white font-medium" onclick="toggleMobileMenu()">Projects</a>
+      <a href="#skills" class="block text-sm py-1.5 text-surface-mutedText hover:text-white font-medium" onclick="toggleMobileMenu()">Skills</a>
+      <a href="#education" class="block text-sm py-1.5 text-surface-mutedText hover:text-white font-medium" onclick="toggleMobileMenu()">Education</a>
+      <a href="#contact" class="block text-sm py-1.5 text-surface-mutedText hover:text-white font-medium" onclick="toggleMobileMenu()">Contact</a>
+      <div class="pt-3 border-t border-surface-border flex gap-3">
+        <button onclick="openResumeModal(); toggleMobileMenu()" class="flex-1 py-2 text-center text-xs font-mono font-medium border border-surface-border rounded bg-surface-canvas text-gray-200">
+          View Resume
+        </button>
+        <a href="#contact" onclick="toggleMobileMenu()" class="flex-1 py-2 text-center text-xs font-mono font-medium rounded bg-brand-600 text-white">
+          Contact
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="flex-grow">
+
+    <!-- ==================== HERO SECTION ==================== -->
+    <section id="hero" class="relative pt-12 pb-16 md:pt-20 md:pb-24 border-b border-surface-border overflow-hidden">
+      <!-- Subtle Grid Pattern Background -->
+      <div class="absolute inset-0 bg-[linear-gradient(to_right,#161b2415_1px,transparent_1px),linear-gradient(to_bottom,#161b2415_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none opacity-40"></div>
+
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+          
+          <!-- Left Content: Value Proposition & Identity -->
+          <div class="lg:col-span-7 space-y-6">
+            <!-- Eyebrow Identity Tag -->
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-surface-border bg-surface-card text-[12px] font-mono font-medium text-brand-500">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>SOFTWARE ENGINEER • FULL-STACK • BACKEND & AI</span>
+            </div>
+
+            <!-- Headline -->
+            <div class="space-y-3">
+              <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white leading-tight">
+                Alex Rivera
+              </h1>
+              <p class="text-xl sm:text-2xl text-gray-300 font-medium leading-snug">
+                Building reliable software, scalable backend APIs, and production AI-powered systems.
+              </p>
+            </div>
+
+            <!-- Description (2-3 concise lines) -->
+            <p class="text-base text-surface-mutedText leading-relaxed max-w-2xl font-normal">
+              Final-year Computer Science Engineering student at California State University. Focused on engineering resilient distributed backends, robust full-stack web platforms, and retrieval-augmented (RAG) AI architectures using TypeScript, Python, PostgreSQL, and Go.
+            </p>
+
+            <!-- Primary CTAs & Direct Proof Links -->
+            <div class="pt-2 flex flex-wrap items-center gap-4">
+              <a href="#projects" class="px-5 py-2.5 rounded bg-brand-600 hover:bg-brand-500 text-white text-sm font-medium transition-colors inline-flex items-center gap-2 shadow-sm font-mono">
+                <span>View Engineered Projects</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </a>
+              <button onclick="openResumeModal()" class="px-5 py-2.5 rounded border border-surface-border hover:border-gray-500 text-gray-200 hover:text-white bg-surface-card hover:bg-surface-cardHover text-sm font-medium transition-all inline-flex items-center gap-2 font-mono">
+                <svg class="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                <span>Read Resume / CV</span>
+              </button>
+            </div>
+
+            <!-- Secondary Links -->
+            <div class="pt-2 flex items-center gap-5 text-xs font-mono text-surface-mutedText">
+              <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="hover:text-white flex items-center gap-1.5 transition-colors">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                </svg>
+                <span>github.com/alexrivera</span>
+              </a>
+              <span class="text-surface-border">•</span>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="hover:text-white flex items-center gap-1.5 transition-colors">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                </svg>
+                <span>linkedin.com/in/alexrivera-cs</span>
+              </a>
+              <span class="text-surface-border">•</span>
+              <a href="mailto:alex.rivera.dev@gmail.com" class="hover:text-white flex items-center gap-1.5 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                </svg>
+                <span>alex.rivera.dev@gmail.com</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Right Content: Minimal Technical Profile / System Status Card -->
+          <div class="lg:col-span-5">
+            <div class="bg-surface-card border border-surface-border rounded-lg p-5 sm:p-6 shadow-xl space-y-4 relative">
+              <!-- Window Bar Header -->
+              <div class="flex items-center justify-between border-b border-surface-border pb-3">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-red-500/80"></span>
+                  <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></span>
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
+                  <span class="text-xs font-mono text-surface-mutedText ml-2">rivera_dev_env.sh</span>
+                </div>
+                <span class="text-[11px] font-mono text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-800/40">Status: Active</span>
+              </div>
+
+              <!-- Terminal Key Spec Items -->
+              <div class="space-y-3 font-mono text-xs">
+                <div class="flex justify-between items-center py-1 border-b border-surface-borderSubtle">
+                  <span class="text-surface-mutedText">Graduation:</span>
+                  <span class="text-white font-medium">May 2025 (B.S. CS, Honors)</span>
+                </div>
+                <div class="flex justify-between items-center py-1 border-b border-surface-borderSubtle">
+                  <span class="text-surface-mutedText">Target Roles:</span>
+                  <span class="text-brand-500 font-medium">SWE • Full-Stack • Backend • AI/ML</span>
+                </div>
+                <div class="flex justify-between items-center py-1 border-b border-surface-borderSubtle">
+                  <span class="text-surface-mutedText">Primary Languages:</span>
+                  <span class="text-gray-200">TypeScript, Python, Go, Java, SQL</span>
+                </div>
+                <div class="flex justify-between items-center py-1 border-b border-surface-borderSubtle">
+                  <span class="text-surface-mutedText">Core Stack:</span>
+                  <span class="text-gray-200">React, Node/FastAPI, Postgres, Docker</span>
+                </div>
+                <div class="flex justify-between items-center py-1 border-b border-surface-borderSubtle">
+                  <span class="text-surface-mutedText">Location / Auth:</span>
+                  <span class="text-gray-200">US Citizen (No Visa Req.) • San Francisco / Remote</span>
+                </div>
+              </div>
+
+              <!-- Live Architecture / Diagnostic Signal -->
+              <div class="p-3 bg-surface-canvas rounded border border-surface-border font-mono text-[11px] space-y-1.5">
+                <div class="flex items-center justify-between text-surface-mutedText">
+                  <span>SYSTEM_LOAD: 0.14</span>
+                  <span>TEST_COVERAGE: 88.4%</span>
+                </div>
+                <div class="w-full bg-surface-border h-1.5 rounded-full overflow-hidden">
+                  <div class="bg-brand-500 h-full w-[88%]"></div>
+                </div>
+                <p class="text-surface-subtleText pt-0.5">
+                  &gt; Ready for summer/fall 2025 full-time software engineering roles.
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== QUICK CREDIBILITY SCAN STRIP ==================== -->
+    <section class="border-b border-surface-border bg-surface-card/60 py-4" aria-label="Quick Recruiter Summary">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 text-center">
+          <div class="border-r border-surface-border last:border-none px-2">
+            <span class="block text-xs font-mono text-surface-mutedText">ACADEMIC</span>
+            <span class="text-sm font-semibold text-white">B.S. CS '25 (3.9 GPA)</span>
+          </div>
+          <div class="border-r border-surface-border last:border-none px-2">
+            <span class="block text-xs font-mono text-surface-mutedText">EXPERIENCE</span>
+            <span class="text-sm font-semibold text-white">2 SWE Internships</span>
+          </div>
+          <div class="border-r border-surface-border last:border-none px-2">
+            <span class="block text-xs font-mono text-surface-mutedText">PRODUCTION APPS</span>
+            <span class="text-sm font-semibold text-white">100K+ Req/Day Handled</span>
+          </div>
+          <div class="border-r border-surface-border last:border-none px-2">
+            <span class="block text-xs font-mono text-surface-mutedText">SYSTEM FOCUS</span>
+            <span class="text-sm font-semibold text-white">Distributed &amp; RAG AI</span>
+          </div>
+          <div class="col-span-2 sm:col-span-1 px-2 flex flex-col justify-center items-center">
+            <span class="inline-flex items-center gap-1.5 text-xs font-mono text-emerald-400 font-medium">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              Interview Ready
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== ABOUT & ENGINEERING MINDSET ==================== -->
+    <section id="about" class="py-16 md:py-20 border-b border-surface-border">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Header -->
+        <div class="flex items-center gap-3 mb-10">
+          <span class="font-mono text-xs text-brand-500 font-semibold tracking-wider uppercase">01 // PROFILE</span>
+          <div class="h-px bg-surface-border flex-grow"></div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+          <!-- Left: Brief Introduction -->
+          <div class="lg:col-span-6 space-y-5">
+            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white">
+              Engineering with pragmatism, rigor, and depth.
+            </h2>
+            <p class="text-surface-mutedText leading-relaxed">
+              I am a software engineer graduating in May 2025 with hands-on experience building web systems that need to be both reliable under load and clean to maintain. Rather than viewing engineering solely as writing code, I treat it as designing end-to-end solutions that solve tangible business problems.
+            </p>
+            <p class="text-surface-mutedText leading-relaxed">
+              During my internships at cloud infrastructure and fintech companies, I owned production API endpoints, optimized complex database queries, and implemented LLM-driven pipelines with strict latency guarantees.
+            </p>
+
+            <div class="pt-2">
+              <h3 class="text-xs font-mono font-semibold text-gray-300 uppercase tracking-wider mb-3">
+                Core Domains of Focus:
+              </h3>
+              <div class="grid grid-cols-2 gap-2 text-xs font-mono">
+                <div class="p-2.5 rounded bg-surface-card border border-surface-border text-gray-200">
+                  <span class="text-brand-500 font-bold mr-1">&gt;</span> Distributed Backend Services
+                </div>
+                <div class="p-2.5 rounded bg-surface-card border border-surface-border text-gray-200">
+                  <span class="text-brand-500 font-bold mr-1">&gt;</span> Full-Stack Web Platforms
+                </div>
+                <div class="p-2.5 rounded bg-surface-card border border-surface-border text-gray-200">
+                  <span class="text-brand-500 font-bold mr-1">&gt;</span> RAG &amp; Vector Pipeline AI
+                </div>
+                <div class="p-2.5 rounded bg-surface-card border border-surface-border text-gray-200">
+                  <span class="text-brand-500 font-bold mr-1">&gt;</span> Schema Design &amp; Caching
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Engineering Mindset (Directly addresses recruiter criteria) -->
+          <div class="lg:col-span-6 bg-surface-card border border-surface-border rounded-lg p-6 sm:p-7 space-y-6">
+            <h3 class="text-lg font-semibold text-white flex items-center gap-2">
+              <svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+              </svg>
+              <span>Engineering Values &amp; Practices</span>
+            </h3>
+
+            <div class="space-y-4 text-sm">
+              <div class="border-l-2 border-brand-500 pl-4 space-y-1">
+                <span class="font-medium text-white block">Understand Foundations Over Black Boxes</span>
+                <p class="text-surface-mutedText text-xs leading-relaxed">
+                  I don't just import packages blindly; I examine how query planners work, how network protocols handle handshakes, and why memory leaks occur in Node/V8 runtimes.
+                </p>
+              </div>
+
+              <div class="border-l-2 border-surface-border pl-4 space-y-1">
+                <span class="font-medium text-white block">Resilience, Observability &amp; Testing</span>
+                <p class="text-surface-mutedText text-xs leading-relaxed">
+                  Code isn't finished when it works on localhost. I structure codebases with unit/integration testing (Jest, PyTest), structured logging, and idempotent API contracts.
+                </p>
+              </div>
+
+              <div class="border-l-2 border-surface-border pl-4 space-y-1">
+                <span class="font-medium text-white block">Fast Feedback &amp; Shippable Iteration</span>
+                <p class="text-surface-mutedText text-xs leading-relaxed">
+                  I favor building minimum viable architectures that deploy quickly, gather real metrics, and scale iteratively based on empirical bottlenecks rather than premature speculation.
+                </p>
+              </div>
+
+              <div class="border-l-2 border-surface-border pl-4 space-y-1">
+                <span class="font-medium text-white block">Empathetic Team Collaboration</span>
+                <p class="text-surface-mutedText text-xs leading-relaxed">
+                  Clear PR writeups, thorough documentation, constructive code reviews, and communicative asynchronous updates are non-negotiable standards in my workflow.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== EXPERIENCE (TIMELINE) ==================== -->
+    <section id="experience" class="py-16 md:py-20 border-b border-surface-border bg-surface-canvas">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Header -->
+        <div class="flex items-center gap-3 mb-12">
+          <span class="font-mono text-xs text-brand-500 font-semibold tracking-wider uppercase">02 // WORK EXPERIENCE</span>
+          <div class="h-px bg-surface-border flex-grow"></div>
+        </div>
+
+        <div class="space-y-8">
+          
+          <!-- Experience Item 1 -->
+          <div class="relative bg-surface-card border border-surface-border rounded-lg p-6 sm:p-8 hover:border-surface-highlight transition-all">
+            <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-b border-surface-border pb-4 mb-5">
+              <div>
+                <h3 class="text-xl font-bold text-white tracking-tight">Software Engineering Intern</h3>
+                <div class="text-sm text-brand-500 font-medium font-mono mt-0.5">ScaleCloud Infrastructure Labs • San Francisco, CA</div>
+              </div>
+              <div class="text-xs font-mono text-surface-mutedText bg-surface-canvas px-3 py-1 rounded border border-surface-border">
+                June 2024 — August 2024 (Summer)
+              </div>
+            </div>
+
+            <!-- Highlights -->
+            <ul class="space-y-2.5 text-sm text-surface-mutedText mb-6">
+              <li class="flex items-start gap-2">
+                <span class="text-brand-500 font-mono text-xs mt-1">&gt;</span>
+                <span>Designed and deployed an automated telemetry ingestion microservice in <strong>Go</strong> and <strong>PostgreSQL</strong> processing over <strong>1.2 million log events/day</strong> from edge nodes.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-brand-500 font-mono text-xs mt-1">&gt;</span>
+                <span>Optimized SQL analytical queries by indexing partition tables and restructuring joining logic, decreasing 95th percentile dashboard query latency from <strong>840ms to 92ms</strong>.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-brand-500 font-mono text-xs mt-1">&gt;</span>
+                <span>Engineered robust rate-limiting middleware using <strong>Redis token bucket algorithms</strong> to protect internal endpoints against denial-of-service traffic spikes.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-brand-500 font-mono text-xs mt-1">&gt;</span>
+                <span>Authored comprehensive unit and integration test suites with 89% coverage and integrated them into GitHub Actions CI/CD pipelines.</span>
+              </li>
+            </ul>
+
+            <!-- Tech Badges -->
+            <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-surface-borderSubtle">
+              <span class="text-xs font-mono text-surface-subtleText mr-2">Stack:</span>
+              <span class="px-2 py-0.5 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-300">Go (Golang)</span>
+              <span class="px-2 py-0.5 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-300">PostgreSQL</span>
+              <span class="px-2 py-0.5 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-300">Redis</span>
+              <span class="px-2 py-0.5 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-300">Docker</span>
+              <span class="px-2 py-0.5 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-300">GitHub Actions</span>
+            </div>
+          </div>
+
+          <!-- Experience Item 2 -->
+          <div class="relative bg-surface-card border border-surface-border rounded-lg p-6 sm:p-8 hover:border-surface-highlight transition-all">
+            <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-b border-surface-border pb-4 mb-5">
+              <div>
+                <h3 class="text-xl font-bold text-white tracking-tight">Full-Stack Developer Intern</h3>
+                <div class="text-sm text-brand-500 font-medium font-mono mt-0.5">Vanguard Financial Analytics • Remote</div>
+              </div>
+              <div class="text-xs font-mono text-surface-mutedText bg-surface-canvas px-3 py-1 rounded border border-surface-border">
+                June 2023 — August 2023 (Summer)
+              </div>
+            </div>
+
+            <!-- Highlights -->
+            <ul class="space-y-2.5 text-sm text-surface-mutedText mb-6">
+              <li class="flex items-start gap-2">
+                <span class="text-brand-500 font-mono text-xs mt-1">&gt;</span>
+                <span>Built client-facing portfolio rebalancing views using <strong>React, TypeScript, and Tailwind CSS</strong>, serving 14,000+ active retail investors.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-brand-500 font-mono text-xs mt-1">&gt;</span>
+                <span>Integrated RESTful microservices with <strong>Node.js / Express</strong> and structured JWT-based role-based access control (RBAC) with strict CSRF protection.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-brand-500 font-mono text-xs mt-1">&gt;</span>
+                <span>Collaborated with senior QA and product managers to resolve 40+ high-priority frontend regression tickets prior to the Q3 production release.</span>
+              </li>
+            </ul>
+
+            <!-- Tech Badges -->
+            <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-surface-borderSubtle">
+              <span class="text-xs font-mono text-surface-subtleText mr-2">Stack:</span>
+              <span class="px-2 py-0.5 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-300">TypeScript</span>
+              <span class="px-2 py-0.5 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-300">React</span>
+              <span class="px-2 py-0.5 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-300">Node.js</span>
+              <span class="px-2 py-0.5 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-300">Express</span>
+              <span class="px-2 py-0.5 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-300">REST APIs</span>
+            </div>
+          </div>
+
+          <!-- Experience Item 3 (Undergrad Researcher / TA) -->
+          <div class="relative bg-surface-card border border-surface-border rounded-lg p-6 sm:p-8 hover:border-surface-highlight transition-all">
+            <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-b border-surface-border pb-4 mb-5">
+              <div>
+                <h3 class="text-xl font-bold text-white tracking-tight">Undergraduate Teaching Assistant: Data Structures &amp; Algorithms</h3>
+                <div class="text-sm text-brand-500 font-medium font-mono mt-0.5">Department of Computer Science • CSU</div>
+              </div>
+              <div class="text-xs font-mono text-surface-mutedText bg-surface-canvas px-3 py-1 rounded border border-surface-border">
+                January 2024 — May 2024
+              </div>
+            </div>
+
+            <ul class="space-y-2.5 text-sm text-surface-mutedText mb-6">
+              <li class="flex items-start gap-2">
+                <span class="text-brand-500 font-mono text-xs mt-1">&gt;</span>
+                <span>Led weekly discussion labs and office hours for 85+ students, explaining graph traversals (BFS/DFS, Dijkstra), tree rebalancing, and asymptotic runtime complexity.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-brand-500 font-mono text-xs mt-1">&gt;</span>
+                <span>Authored automated autograding scripts in Python to evaluate student submissions for algorithmic correctness and memory safety.</span>
+              </li>
+            </ul>
+
+            <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-surface-borderSubtle">
+              <span class="text-xs font-mono text-surface-subtleText mr-2">Focus:</span>
+              <span class="px-2 py-0.5 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-300">Algorithms</span>
+              <span class="px-2 py-0.5 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-300">Data Structures</span>
+              <span class="px-2 py-0.5 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-300">Python Testing</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== PROJECTS (FEATURED + GRID + INTERACTION) ==================== -->
+    <section id="projects" class="py-16 md:py-20 border-b border-surface-border">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Header -->
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-3">
+            <span class="font-mono text-xs text-brand-500 font-semibold tracking-wider uppercase">03 // SELECTED TECHNICAL WORK</span>
+          </div>
+          <span class="text-xs font-mono text-surface-mutedText hidden sm:inline">Click any project card to inspect architecture modal</span>
+        </div>
+        <div class="h-px bg-surface-border mb-10"></div>
+
+        <!-- 1. PRIMARY FEATURED PROJECT (Large Horizontal Case-Study Card) -->
+        <div class="mb-10 bg-surface-card border border-surface-border rounded-xl p-6 sm:p-8 lg:p-10 shadow-lg relative group hover:border-brand-500/60 transition-all">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <div class="lg:col-span-8 space-y-4">
+              <!-- Label -->
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 text-[11px] font-mono uppercase bg-brand-500/10 text-brand-500 rounded border border-brand-500/30 font-medium">Featured Case Study</span>
+                <span class="text-xs font-mono text-surface-mutedText">Production Ready</span>
+              </div>
+
+              <!-- Project Title & Subtitle -->
+              <div>
+                <h3 class="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-3">
+                  <span>NexusRAG: Distributed Enterprise Knowledge Agent</span>
+                </h3>
+                <p class="text-sm font-mono text-brand-500 mt-1">High-Throughput Retrieval-Augmented Generation Platform with Citation Verification</p>
+              </div>
+
+              <!-- Problem & Solution Overview -->
+              <div class="space-y-2 text-sm text-surface-mutedText">
+                <p>
+                  <strong class="text-white font-medium">The Engineering Problem:</strong> Enterprise documentation queries suffered from high hallucinations and slow semantic retrieval across millions of dense technical PDF tokens.
+                </p>
+                <p>
+                  <strong class="text-white font-medium">Technical Implementation:</strong> Built an asynchronous pipeline in <strong>FastAPI and Python</strong> leveraging <strong>pgvector (PostgreSQL)</strong> for HNSW indexing, <strong>OpenAI embeddings</strong>, and <strong>LangChain</strong> orchestration. Implemented hybrid reciprocal rank fusion (BM25 lexical + semantic dense vectors) delivering sub-250ms query responses.
+                </p>
+              </div>
+
+              <!-- Engineering Highlights Bullet List -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono text-gray-300 pt-1">
+                <div class="flex items-center gap-2 bg-surface-canvas p-2 rounded border border-surface-border">
+                  <span class="text-brand-500 font-bold">•</span>
+                  <span>Hybrid Semantic + BM25 Search</span>
+                </div>
+                <div class="flex items-center gap-2 bg-surface-canvas p-2 rounded border border-surface-border">
+                  <span class="text-brand-500 font-bold">•</span>
+                  <span>Streaming SSE Response Tokenizer</span>
+                </div>
+                <div class="flex items-center gap-2 bg-surface-canvas p-2 rounded border border-surface-border">
+                  <span class="text-brand-500 font-bold">•</span>
+                  <span>Celery + Redis Background Workers</span>
+                </div>
+                <div class="flex items-center gap-2 bg-surface-canvas p-2 rounded border border-surface-border">
+                  <span class="text-brand-500 font-bold">•</span>
+                  <span>Strict Token-Budget Caching Layer</span>
+                </div>
+              </div>
+
+              <!-- Tech Badges -->
+              <div class="flex flex-wrap gap-2 pt-3">
+                <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">Python 3.11</span>
+                <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">FastAPI</span>
+                <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">PostgreSQL (pgvector)</span>
+                <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">LangChain</span>
+                <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">Redis</span>
+                <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">Docker</span>
+              </div>
+            </div>
+
+            <!-- Action & Metrics Panel -->
+            <div class="lg:col-span-4 bg-surface-canvas border border-surface-border rounded-lg p-5 space-y-5">
+              <div class="space-y-3 font-mono text-xs">
+                <div class="text-gray-400 font-medium uppercase tracking-wider text-[11px] pb-1 border-b border-surface-border">
+                  Benchmark Metrics
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-surface-mutedText">Median Query Time:</span>
+                  <span class="text-emerald-400 font-semibold">185ms</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-surface-mutedText">Indexing Throughput:</span>
+                  <span class="text-white font-semibold">1,200 chunks/min</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-surface-mutedText">Citation Precision:</span>
+                  <span class="text-white font-semibold">96.4%</span>
+                </div>
+              </div>
+
+              <div class="space-y-2 pt-2">
+                <button onclick="openProjectModal('nexusrag')" class="w-full py-2.5 rounded bg-brand-600 hover:bg-brand-500 text-white text-xs font-mono font-medium transition-colors flex items-center justify-center gap-2">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                  </svg>
+                  <span>Open Deep Architecture Modal</span>
+                </button>
+                <div class="flex gap-2">
+                  <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="flex-1 py-2 text-center text-xs font-mono rounded bg-surface-card border border-surface-border hover:border-gray-400 text-gray-200 transition-colors">
+                    GitHub Code
+                  </a>
+                  <a href="https://demo-service.com" target="_blank" rel="noopener noreferrer" class="flex-1 py-2 text-center text-xs font-mono rounded bg-surface-card border border-surface-border hover:border-gray-400 text-brand-400 transition-colors">
+                    Live Demo ↗
+                  </a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 2. OTHER ENGINEERING PROJECTS (Responsive Grid) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+          <!-- Project Card 2: Distributed Job Queue -->
+          <div class="bg-surface-card border border-surface-border rounded-lg p-6 flex flex-col justify-between hover:border-brand-500/50 transition-all cursor-pointer group" onclick="openProjectModal('jobqueue')">
+            <div class="space-y-3">
+              <div class="flex justify-between items-start">
+                <span class="text-[11px] font-mono text-brand-500 font-semibold uppercase">SYSTEMS / BACKEND</span>
+                <span class="text-[11px] font-mono text-surface-subtleText">Go • Redis</span>
+              </div>
+              <h4 class="text-lg font-bold text-white group-hover:text-brand-500 transition-colors">
+                KiteQueue: Distributed Worker Engine
+              </h4>
+              <p class="text-xs text-surface-mutedText leading-relaxed">
+                Lightweight distributed priority job queue in Go with at-least-once delivery guarantees, dead-letter queues, heartbeats, and exponential backoff retry algorithms.
+              </p>
+              
+              <div class="space-y-1.5 text-xs font-mono text-gray-300 pt-2">
+                <div class="flex items-center gap-1.5 text-[11px]">
+                  <span class="text-brand-500">✓</span> 50,000 tasks/sec throughput benchmarked
+                </div>
+                <div class="flex items-center gap-1.5 text-[11px]">
+                  <span class="text-brand-500">✓</span> Worker leader election with Redis leases
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-5 mt-4 border-t border-surface-borderSubtle flex items-center justify-between">
+              <div class="flex gap-1.5 flex-wrap">
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-canvas border border-surface-border text-gray-300">Golang</span>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-canvas border border-surface-border text-gray-300">Redis</span>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-canvas border border-surface-border text-gray-300">gRPC</span>
+              </div>
+              <span class="text-xs font-mono text-brand-500 group-hover:translate-x-1 transition-transform">Details →</span>
+            </div>
+          </div>
+
+          <!-- Project Card 3: Full-Stack Dev Platform -->
+          <div class="bg-surface-card border border-surface-border rounded-lg p-6 flex flex-col justify-between hover:border-brand-500/50 transition-all cursor-pointer group" onclick="openProjectModal('apigateway')">
+            <div class="space-y-3">
+              <div class="flex justify-between items-start">
+                <span class="text-[11px] font-mono text-brand-500 font-semibold uppercase">FULL-STACK • DEV TOOLS</span>
+                <span class="text-[11px] font-mono text-surface-subtleText">TypeScript • React</span>
+              </div>
+              <h4 class="text-lg font-bold text-white group-hover:text-brand-500 transition-colors">
+                PulseAPI: Schema Monitor &amp; Testing Hub
+              </h4>
+              <p class="text-xs text-surface-mutedText leading-relaxed">
+                Full-stack developer platform that continuously scans GraphQL and OpenAPI endpoints for breaking schema changes, mocking synthetic payloads and issuing Slack webhooks.
+              </p>
+              
+              <div class="space-y-1.5 text-xs font-mono text-gray-300 pt-2">
+                <div class="flex items-center gap-1.5 text-[11px]">
+                  <span class="text-brand-500">✓</span> Automated breaking change diff detection
+                </div>
+                <div class="flex items-center gap-1.5 text-[11px]">
+                  <span class="text-brand-500">✓</span> Multi-tenant workspace RBAC &amp; API keys
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-5 mt-4 border-t border-surface-borderSubtle flex items-center justify-between">
+              <div class="flex gap-1.5 flex-wrap">
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-canvas border border-surface-border text-gray-300">React</span>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-canvas border border-surface-border text-gray-300">Node.js</span>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-canvas border border-surface-border text-gray-300">PostgreSQL</span>
+              </div>
+              <span class="text-xs font-mono text-brand-500 group-hover:translate-x-1 transition-transform">Details →</span>
+            </div>
+          </div>
+
+          <!-- Project Card 4: AI Vector Evaluation Suite -->
+          <div class="bg-surface-card border border-surface-border rounded-lg p-6 flex flex-col justify-between hover:border-brand-500/50 transition-all cursor-pointer group" onclick="openProjectModal('vectoreval')">
+            <div class="space-y-3">
+              <div class="flex justify-between items-start">
+                <span class="text-[11px] font-mono text-brand-500 font-semibold uppercase">AI / ML INFRA</span>
+                <span class="text-[11px] font-mono text-surface-subtleText">Python • ChromaDB</span>
+              </div>
+              <h4 class="text-lg font-bold text-white group-hover:text-brand-500 transition-colors">
+                VectorBench: Embedding Model Profiler
+              </h4>
+              <p class="text-xs text-surface-mutedText leading-relaxed">
+                Empirical evaluation harness comparing cosine distance vs inner product performance across 8 open-source embedding models on legal and biomedical text corpuses.
+              </p>
+              
+              <div class="space-y-1.5 text-xs font-mono text-gray-300 pt-2">
+                <div class="flex items-center gap-1.5 text-[11px]">
+                  <span class="text-brand-500">✓</span> Memory usage vs recall curve visualization
+                </div>
+                <div class="flex items-center gap-1.5 text-[11px]">
+                  <span class="text-brand-500">✓</span> Automated dataset synthetic augmentation
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-5 mt-4 border-t border-surface-borderSubtle flex items-center justify-between">
+              <div class="flex gap-1.5 flex-wrap">
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-canvas border border-surface-border text-gray-300">Python</span>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-canvas border border-surface-border text-gray-300">PyTorch</span>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-canvas border border-surface-border text-gray-300">FastAPI</span>
+              </div>
+              <span class="text-xs font-mono text-brand-500 group-hover:translate-x-1 transition-transform">Details →</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SKILLS (STRUCTURED ENGINEERING CATEGORIES) ==================== -->
+    <section id="skills" class="py-16 md:py-20 border-b border-surface-border bg-surface-canvas">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Header -->
+        <div class="flex items-center gap-3 mb-4">
+          <span class="font-mono text-xs text-brand-500 font-semibold tracking-wider uppercase">04 // TECHNICAL SKILLS</span>
+          <div class="h-px bg-surface-border flex-grow"></div>
+        </div>
+        <p class="text-xs font-mono text-surface-mutedText mb-8">
+          Only technologies and patterns I have implemented in production or extensive projects and can defend technically in interviews.
+        </p>
+
+        <!-- Categories Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+          <!-- Languages -->
+          <div class="bg-surface-card border border-surface-border rounded-lg p-5 space-y-3">
+            <div class="flex items-center gap-2 border-b border-surface-borderSubtle pb-2.5">
+              <span class="text-brand-500 font-mono text-sm font-bold">01.</span>
+              <h3 class="text-sm font-semibold text-white uppercase tracking-wider font-mono">Languages</h3>
+            </div>
+            <div class="flex flex-wrap gap-2 pt-1">
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">TypeScript</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">JavaScript (ES6+)</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">Python 3</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">Go (Golang)</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">Java (Spring)</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">SQL (ANSI/Postgres)</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">C++ (Academic)</span>
+            </div>
+          </div>
+
+          <!-- Backend & APIs -->
+          <div class="bg-surface-card border border-surface-border rounded-lg p-5 space-y-3">
+            <div class="flex items-center gap-2 border-b border-surface-borderSubtle pb-2.5">
+              <span class="text-brand-500 font-mono text-sm font-bold">02.</span>
+              <h3 class="text-sm font-semibold text-white uppercase tracking-wider font-mono">Backend &amp; APIs</h3>
+            </div>
+            <div class="flex flex-wrap gap-2 pt-1">
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">Node.js</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">Express.js</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">FastAPI</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">RESTful Architecture</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">gRPC &amp; Protobuf</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">Server-Sent Events (SSE)</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">JWT / OAuth 2.0</span>
+            </div>
+          </div>
+
+          <!-- Databases & Caching -->
+          <div class="bg-surface-card border border-surface-border rounded-lg p-5 space-y-3">
+            <div class="flex items-center gap-2 border-b border-surface-borderSubtle pb-2.5">
+              <span class="text-brand-500 font-mono text-sm font-bold">03.</span>
+              <h3 class="text-sm font-semibold text-white uppercase tracking-wider font-mono">Databases &amp; Caching</h3>
+            </div>
+            <div class="flex flex-wrap gap-2 pt-1">
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">PostgreSQL (Relational/Indexes)</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">Redis (Pub/Sub &amp; Caching)</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">MongoDB</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">pgvector</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">Prisma / Drizzle ORM</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">ACID Transactions</span>
+            </div>
+          </div>
+
+          <!-- AI & ML Engineering -->
+          <div class="bg-surface-card border border-surface-border rounded-lg p-5 space-y-3">
+            <div class="flex items-center gap-2 border-b border-surface-borderSubtle pb-2.5">
+              <span class="text-brand-500 font-mono text-sm font-bold">04.</span>
+              <h3 class="text-sm font-semibold text-white uppercase tracking-wider font-mono">AI &amp; Applied ML</h3>
+            </div>
+            <div class="flex flex-wrap gap-2 pt-1">
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">RAG Pipelines</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">Vector Embeddings (HNSW)</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">LangChain &amp; LlamaIndex</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">OpenAI &amp; Claude APIs</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">Prompt Engineering &amp; JSON Schemas</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">HuggingFace Transformers</span>
+            </div>
+          </div>
+
+          <!-- Frontend Architecture -->
+          <div class="bg-surface-card border border-surface-border rounded-lg p-5 space-y-3">
+            <div class="flex items-center gap-2 border-b border-surface-borderSubtle pb-2.5">
+              <span class="text-brand-500 font-mono text-sm font-bold">05.</span>
+              <h3 class="text-sm font-semibold text-white uppercase tracking-wider font-mono">Frontend Engineering</h3>
+            </div>
+            <div class="flex flex-wrap gap-2 pt-1">
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">React 18</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">Next.js / SSR</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">Tailwind CSS</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">Vite</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">Zustand / TanStack Query</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">Semantic &amp; Accessible HTML (a11y)</span>
+            </div>
+          </div>
+
+          <!-- DevOps & Systems -->
+          <div class="bg-surface-card border border-surface-border rounded-lg p-5 space-y-3">
+            <div class="flex items-center gap-2 border-b border-surface-borderSubtle pb-2.5">
+              <span class="text-brand-500 font-mono text-sm font-bold">06.</span>
+              <h3 class="text-sm font-semibold text-white uppercase tracking-wider font-mono">Tools &amp; DevOps</h3>
+            </div>
+            <div class="flex flex-wrap gap-2 pt-1">
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">Git / GitHub Workflows</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">Docker &amp; Multi-stage Builds</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">Linux / Bash Scripting</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">AWS (S3, EC2, Lambda)</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">CI/CD GitHub Actions</span>
+              <span class="px-2.5 py-1 text-xs font-mono bg-surface-canvas border border-surface-border rounded text-gray-200">Nginx Reverse Proxy</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== EDUCATION & ACHIEVEMENTS ==================== -->
+    <section id="education" class="py-16 md:py-20 border-b border-surface-border">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+          
+          <!-- Education Column (Compact) -->
+          <div class="lg:col-span-5 space-y-4">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="font-mono text-xs text-brand-500 font-semibold tracking-wider uppercase">05 // EDUCATION</span>
+            </div>
+            
+            <div class="bg-surface-card border border-surface-border rounded-lg p-6 space-y-4">
+              <div>
+                <h3 class="text-lg font-bold text-white tracking-tight">Bachelor of Science in Computer Science</h3>
+                <p class="text-sm text-brand-500 font-medium font-mono">California State University, Long Beach</p>
+                <p class="text-xs text-surface-mutedText font-mono mt-1">Expected Graduation: May 2025 • GPA: 3.91 / 4.00 (Dean's List)</p>
+              </div>
+
+              <div class="pt-3 border-t border-surface-borderSubtle">
+                <span class="text-xs font-mono uppercase text-gray-400 block mb-2 font-medium">Relevant Rigorous Coursework:</span>
+                <div class="grid grid-cols-2 gap-1.5 text-xs text-surface-mutedText font-mono">
+                  <span>• Distributed Systems</span>
+                  <span>• Database Architectures</span>
+                  <span>• Algorithms &amp; Complexity</span>
+                  <span>• Operating Systems (C/POSIX)</span>
+                  <span>• Software Architecture</span>
+                  <span>• Artificial Intelligence</span>
+                  <span>• Computer Networks (TCP/IP)</span>
+                  <span>• Object-Oriented Design</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Achievements & Leadership Column -->
+          <div class="lg:col-span-7 space-y-4">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="font-mono text-xs text-brand-500 font-semibold tracking-wider uppercase">06 // ACHIEVEMENTS &amp; INITIATIVE</span>
+            </div>
+
+            <div class="bg-surface-card border border-surface-border rounded-lg p-6 space-y-4">
+              
+              <!-- Item 1 -->
+              <div class="flex items-start gap-3 border-b border-surface-borderSubtle pb-3.5">
+                <span class="text-brand-500 font-mono font-bold text-xs mt-0.5">[01]</span>
+                <div class="space-y-0.5">
+                  <h4 class="text-sm font-semibold text-white">1st Place Overall — HackTech Collegiate Hackathon (2024)</h4>
+                  <p class="text-xs text-surface-mutedText leading-relaxed">
+                    Designed an offline-first mesh communications dispatch system during disaster scenarios using WebRTC and local SQLite synchronization. Outperformed 72 competing student teams.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Item 2 -->
+              <div class="flex items-start gap-3 border-b border-surface-borderSubtle pb-3.5">
+                <span class="text-brand-500 font-mono font-bold text-xs mt-0.5">[02]</span>
+                <div class="space-y-0.5">
+                  <h4 class="text-sm font-semibold text-white">Lead Technical Organizer — ACM Student Chapter</h4>
+                  <p class="text-xs text-surface-mutedText leading-relaxed">
+                    Curated and instructed 6 hands-on workshops on backend systems, Git collaboration, and Docker fundamentals attended by 120+ collegiate CS underclassmen.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Item 3 -->
+              <div class="flex items-start gap-3">
+                <span class="text-brand-500 font-mono font-bold text-xs mt-0.5">[03]</span>
+                <div class="space-y-0.5">
+                  <h4 class="text-sm font-semibold text-white">Open Source Contributor — FastStream &amp; LangChain Docs</h4>
+                  <p class="text-xs text-surface-mutedText leading-relaxed">
+                    Submitted merged bug fixes for asynchronous Redis consumer reconnect logic and authored comprehensive documentation examples on pgvector chunk reranking.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== RESUME CTA & RECRUITER ACTION ==================== -->
+    <section class="py-14 border-b border-surface-border bg-gradient-to-b from-surface-canvas to-surface-card">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+        <span class="inline-block font-mono text-xs text-brand-500 uppercase tracking-widest font-semibold">
+          NEXT STEPS FOR RECRUITERS &amp; HIRING MANAGERS
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+          Interested in evaluating my engineering fit for your team?
+        </h2>
+        <p class="text-sm text-surface-mutedText max-w-xl mx-auto leading-relaxed">
+          I am actively interviewing for 2025 Full-Time Software Engineering (New Grad), Backend, Full-Stack, and AI Systems roles. Available for on-site or remote arrangements.
+        </p>
+
+        <div class="flex flex-wrap justify-center items-center gap-4 pt-2">
+          <button onclick="openResumeModal()" class="px-6 py-3 rounded bg-brand-600 hover:bg-brand-500 text-white text-sm font-mono font-medium transition-colors inline-flex items-center gap-2 shadow-md">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            <span>View Complete Resume (PDF)</span>
+          </button>
+          <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="px-5 py-3 rounded bg-surface-card border border-surface-border hover:border-gray-500 text-gray-200 text-sm font-mono transition-colors">
+            Inspect GitHub Repos
+          </a>
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="px-5 py-3 rounded bg-surface-card border border-surface-border hover:border-gray-500 text-gray-200 text-sm font-mono transition-colors">
+            Connect on LinkedIn
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== CONTACT SECTION ==================== -->
+    <section id="contact" class="py-16 md:py-20 border-b border-surface-border bg-surface-canvas">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+          
+          <!-- Contact Direct Links -->
+          <div class="lg:col-span-5 space-y-6">
+            <div class="flex items-center gap-2">
+              <span class="font-mono text-xs text-brand-500 font-semibold tracking-wider uppercase">07 // DIRECT CONTACT</span>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+              Let's talk engineering.
+            </h2>
+            <p class="text-sm text-surface-mutedText leading-relaxed">
+              I reply promptly to inquiries regarding open full-time positions, technical questions about my projects, or engineering collaborations.
+            </p>
+
+            <div class="space-y-3 font-mono text-xs pt-2">
+              <a href="mailto:alex.rivera.dev@gmail.com" class="p-3.5 rounded bg-surface-card border border-surface-border hover:border-brand-500 text-gray-200 flex items-center justify-between transition-colors">
+                <div class="flex items-center gap-2.5">
+                  <svg class="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                  </svg>
+                  <span>alex.rivera.dev@gmail.com</span>
+                </div>
+                <span class="text-brand-500">Email ↗</span>
+              </a>
+
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="p-3.5 rounded bg-surface-card border border-surface-border hover:border-brand-500 text-gray-200 flex items-center justify-between transition-colors">
+                <div class="flex items-center gap-2.5">
+                  <svg class="w-4 h-4 text-brand-500 fill-current" viewBox="0 0 24 24">
+                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                  </svg>
+                  <span>linkedin.com/in/alexrivera-cs</span>
+                </div>
+                <span class="text-brand-500">Connect ↗</span>
+              </a>
+
+              <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="p-3.5 rounded bg-surface-card border border-surface-border hover:border-brand-500 text-gray-200 flex items-center justify-between transition-colors">
+                <div class="flex items-center gap-2.5">
+                  <svg class="w-4 h-4 text-brand-500 fill-current" viewBox="0 0 24 24">
+                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                  </svg>
+                  <span>github.com/alexrivera</span>
+                </div>
+                <span class="text-brand-500">Repositories ↗</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Clean Recruiter In-Page Message Form -->
+          <div class="lg:col-span-7 bg-surface-card border border-surface-border rounded-lg p-6 sm:p-7">
+            <h3 class="text-base font-semibold text-white mb-1">Direct Message</h3>
+            <p class="text-xs text-surface-mutedText mb-5 font-mono">Dispatches directly to my primary inbox with verified status.</p>
+
+            <form id="contactForm" onsubmit="handleFormSubmit(event)" class="space-y-4 text-xs font-mono">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="space-y-1.5">
+                  <label for="name" class="text-gray-300 block">Name / Recruiter Org <span class="text-brand-500">*</span></label>
+                  <input type="text" id="name" required placeholder="e.g. Sarah Connor (Tech Recruiter)" class="w-full bg-surface-canvas border border-surface-border rounded px-3 py-2 text-white placeholder-surface-subtleText focus:border-brand-500 focus:outline-none transition-colors">
+                </div>
+                <div class="space-y-1.5">
+                  <label for="email" class="text-gray-300 block">Work Email <span class="text-brand-500">*</span></label>
+                  <input type="email" id="email" required placeholder="s.connor@company.com" class="w-full bg-surface-canvas border border-surface-border rounded px-3 py-2 text-white placeholder-surface-subtleText focus:border-brand-500 focus:outline-none transition-colors">
+                </div>
+              </div>
+
+              <div class="space-y-1.5">
+                <label for="subject" class="text-gray-300 block">Subject / Role Opportunity</label>
+                <input type="text" id="subject" placeholder="SWE (New Grad) Role @ [Company Name]" class="w-full bg-surface-canvas border border-surface-border rounded px-3 py-2 text-white placeholder-surface-subtleText focus:border-brand-500 focus:outline-none transition-colors">
+              </div>
+
+              <div class="space-y-1.5">
+                <label for="message" class="text-gray-300 block">Message Details <span class="text-brand-500">*</span></label>
+                <textarea id="message" rows="4" required placeholder="Tell me about the team, tech stack, or questions about my background..." class="w-full bg-surface-canvas border border-surface-border rounded px-3 py-2 text-white placeholder-surface-subtleText focus:border-brand-500 focus:outline-none transition-colors"></textarea>
+              </div>
+
+              <div class="flex items-center justify-between pt-2">
+                <button type="submit" id="submitBtn" class="px-5 py-2.5 rounded bg-brand-600 hover:bg-brand-500 text-white font-medium transition-colors flex items-center gap-2">
+                  <span>Send Message</span>
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                  </svg>
+                </button>
+                <span id="formFeedback" class="text-xs text-emerald-400 hidden font-mono">✓ Message sent successfully! I'll reply within 24 hours.</span>
+              </div>
+            </form>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="border-t border-surface-border bg-surface-canvas py-8 text-xs font-mono text-surface-mutedText">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="text-white font-semibold">Alex Rivera</span>
+        <span>— Software Engineer • Full-Stack • AI/ML</span>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">GitHub</a>
+        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">LinkedIn</a>
+        <button onclick="openResumeModal()" class="hover:text-white transition-colors">Resume.pdf</button>
+        <span class="text-surface-subtleText">© 2025 Alex Rivera</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== PROJECT DEEP-DIVE CASE STUDY MODAL ==================== -->
+  <div id="projectModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="bg-surface-card border border-surface-border w-full max-w-3xl max-h-[90vh] rounded-xl overflow-hidden shadow-2xl flex flex-col relative animate-fade-in">
+      
+      <!-- Modal Header -->
+      <div class="px-6 py-4 border-b border-surface-border flex items-center justify-between bg-surface-canvas/60">
+        <div>
+          <span id="modalCategory" class="text-[11px] font-mono text-brand-500 uppercase font-semibold">SYSTEM ARCHITECTURE</span>
+          <h3 id="modalTitle" class="text-xl font-bold text-white tracking-tight mt-0.5">Project Title</h3>
+        </div>
+        <button onclick="closeProjectModal()" class="p-2 rounded text-surface-mutedText hover:text-white hover:bg-surface-border transition-colors" aria-label="Close modal">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Modal Body (Scrollable) -->
+      <div id="modalContent" class="p-6 overflow-y-auto space-y-6 text-sm text-surface-mutedText">
+        <!-- Content injected dynamically via JS -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-6 py-3.5 border-t border-surface-border bg-surface-canvas/60 flex items-center justify-between font-mono text-xs">
+        <span class="text-surface-subtleText">Recruiter Case-Study View</span>
+        <div class="flex gap-3">
+          <a id="modalGithubLink" href="#" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded bg-surface-card border border-surface-border hover:border-gray-400 text-gray-200">
+            Source Code (GitHub)
+          </a>
+          <button onclick="closeProjectModal()" class="px-4 py-1.5 rounded bg-brand-600 hover:bg-brand-500 text-white font-medium">
+            Close View
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== RESUME QUICK-VIEW MODAL ==================== -->
+  <div id="resumeModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="resumeTitle">
+    <div class="bg-surface-card border border-surface-border w-full max-w-4xl max-h-[92vh] rounded-xl overflow-hidden shadow-2xl flex flex-col relative">
+      
+      <div class="px-6 py-4 border-b border-surface-border flex items-center justify-between bg-surface-canvas">
+        <div class="flex items-center gap-3">
+          <span class="p-2 rounded bg-surface-card border border-surface-border text-brand-500 font-mono text-xs font-bold">PDF</span>
+          <div>
+            <h3 id="resumeTitle" class="text-base font-bold text-white tracking-tight">Alex_Rivera_Software_Engineer_Resume.pdf</h3>
+            <p class="text-xs font-mono text-surface-mutedText">Updated for Summer/Fall 2025 Opportunities • 1-Page Format</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <a href="#contact" onclick="closeResumeModal()" class="px-3 py-1.5 rounded bg-brand-600 hover:bg-brand-500 text-white font-mono text-xs font-medium">
+            Contact Alex
+          </a>
+          <button onclick="closeResumeModal()" class="p-2 rounded text-surface-mutedText hover:text-white hover:bg-surface-border transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Realistic Clean Styled Resume Preview -->
+      <div class="p-6 md:p-8 overflow-y-auto bg-[#0a0c10] text-gray-200 font-sans space-y-6 text-xs leading-relaxed border-t border-surface-borderSubtle">
+        
+        <!-- Header -->
+        <div class="text-center pb-4 border-b border-surface-border space-y-1">
+          <h2 class="text-xl font-bold tracking-tight text-white">ALEX RIVERA</h2>
+          <div class="font-mono text-surface-mutedText text-[11px] flex flex-wrap justify-center gap-3">
+            <span>San Francisco, CA</span>
+            <span>•</span>
+            <span>alex.rivera.dev@gmail.com</span>
+            <span>•</span>
+            <span>github.com/alexrivera</span>
+            <span>•</span>
+            <span>linkedin.com/in/alexrivera-cs</span>
+          </div>
+          <p class="text-xs font-medium text-brand-400 pt-1">
+            Targeting: Software Engineer | Full-Stack Developer | Backend Systems | AI/ML Engineering
+          </p>
+        </div>
+
+        <!-- Resume: Education -->
+        <div class="space-y-2">
+          <h4 class="text-xs font-mono uppercase font-bold text-white tracking-wider border-b border-surface-border pb-1">
+            EDUCATION
+          </h4>
+          <div class="flex justify-between items-baseline">
+            <div>
+              <span class="font-bold text-white">California State University, Long Beach</span> — B.S. in Computer Science
+            </div>
+            <span class="font-mono text-surface-mutedText text-[11px]">Expected May 2025</span>
+          </div>
+          <div class="text-surface-mutedText text-[11px] font-mono">
+            GPA: 3.91/4.00 (Dean’s Honor List) | Coursework: Distributed Systems, Operating Systems, Algorithms & Complexity, Database Systems, Computer Networks
+          </div>
+        </div>
+
+        <!-- Resume: Experience -->
+        <div class="space-y-4">
+          <h4 class="text-xs font-mono uppercase font-bold text-white tracking-wider border-b border-surface-border pb-1">
+            TECHNICAL EXPERIENCE
+          </h4>
+          
+          <div>
+            <div class="flex justify-between items-baseline">
+              <span class="font-bold text-white">ScaleCloud Infrastructure Labs — Software Engineering Intern</span>
+              <span class="font-mono text-surface-mutedText text-[11px]">Jun 2024 – Aug 2024</span>
+            </div>
+            <p class="text-surface-mutedText text-[11px] italic mb-1.5 font-mono">San Francisco, CA | Go, PostgreSQL, Redis, Docker, GitHub Actions</p>
+            <ul class="list-disc list-inside space-y-1 text-surface-mutedText text-[11px]">
+              <li>Engineered a high-throughput telemetry ingestion microservice in Go and PostgreSQL, handling 1.2M+ daily log events with 99.98% uptime.</li>
+              <li>Optimized partition indexing and join execution in PostgreSQL, reducing p95 dashboard query latency from 840ms to 92ms.</li>
+              <li>Implemented distributed rate-limiting via Redis token bucket algorithm, mitigating denial-of-service spikes on internal endpoints.</li>
+            </ul>
+          </div>
+
+          <div>
+            <div class="flex justify-between items-baseline">
+              <span class="font-bold text-white">Vanguard Financial Analytics — Full-Stack Developer Intern</span>
+              <span class="font-mono text-surface-mutedText text-[11px]">Jun 2023 – Aug 2023</span>
+            </div>
+            <p class="text-surface-mutedText text-[11px] italic mb-1.5 font-mono">Remote | TypeScript, React, Node.js, Express, REST APIs</p>
+            <ul class="list-disc list-inside space-y-1 text-surface-mutedText text-[11px]">
+              <li>Developed accessible, responsive investor portfolio management views using React and Tailwind CSS for 14K+ active retail users.</li>
+              <li>Engineered role-based authentication and secure JWT validation middleware with CSRF protection on Node.js/Express APIs.</li>
+              <li>Authored comprehensive Jest unit tests and improved test coverage from 64% to 82% across shared frontend utility modules.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Resume: Projects -->
+        <div class="space-y-3">
+          <h4 class="text-xs font-mono uppercase font-bold text-white tracking-wider border-b border-surface-border pb-1">
+            NOTABLE TECHNICAL PROJECTS
+          </h4>
+
+          <div>
+            <div class="flex justify-between items-baseline">
+              <span class="font-bold text-white">NexusRAG: Distributed Enterprise Knowledge Agent</span>
+              <span class="font-mono text-surface-mutedText text-[11px]">FastAPI, Python, pgvector, LangChain</span>
+            </div>
+            <p class="text-surface-mutedText text-[11px]">
+              Engineered hybrid vector search (BM25 lexical + dense HNSW) achieving sub-250ms latency across 100K+ enterprise documents. Added streaming Server-Sent Events (SSE) and Celery background re-indexing.
+            </p>
+          </div>
+
+          <div>
+            <div class="flex justify-between items-baseline">
+              <span class="font-bold text-white">KiteQueue: Distributed Task Queue</span>
+              <span class="font-mono text-surface-mutedText text-[11px]">Go, Redis, gRPC</span>
+            </div>
+            <p class="text-surface-mutedText text-[11px]">
+              Built priority worker pool with heartbeats, dead-letter re-routing, and exponential backoffs capable of 50,000 tasks/second.
+            </p>
+          </div>
+        </div>
+
+        <!-- Resume: Skills -->
+        <div class="space-y-2">
+          <h4 class="text-xs font-mono uppercase font-bold text-white tracking-wider border-b border-surface-border pb-1">
+            SKILLS &amp; PROFICIENCIES
+          </h4>
+          <div class="text-[11px] font-mono space-y-1 text-surface-mutedText">
+            <p><strong class="text-gray-200">Languages:</strong> TypeScript, JavaScript, Python, Go, Java, SQL (PostgreSQL), C++</p>
+            <p><strong class="text-gray-200">Frameworks:</strong> React, Next.js, Node.js, Express, FastAPI, Tailwind CSS</p>
+            <p><strong class="text-gray-200">Infrastructure:</strong> Docker, Git/GitHub, Redis, PostgreSQL, AWS (EC2/S3), CI/CD, Nginx</p>
+            <p><strong class="text-gray-200">AI/ML:</strong> Vector Search (pgvector, ChromaDB), LangChain, RAG Systems, Embedding Models</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="px-6 py-3 border-t border-surface-border bg-surface-canvas flex justify-between items-center text-xs font-mono">
+        <span class="text-surface-subtleText">ATS-Formatted 1-Page Layout</span>
+        <button onclick="downloadResumeNotice()" class="px-3.5 py-1.5 rounded bg-brand-600 hover:bg-brand-500 text-white font-medium">
+          Download PDF
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== VANILLA JAVASCRIPT LOGIC ==================== -->
+  <script>
+    // Mobile navigation drawer toggle
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      const hamburger = document.getElementById('hamburgerIcon');
+      const close = document.getElementById('closeIcon');
+      const isOpen = !menu.classList.contains('hidden');
+
+      if (isOpen) {
+        menu.classList.add('hidden');
+        hamburger.classList.remove('hidden');
+        close.classList.add('hidden');
+      } else {
+        menu.classList.remove('hidden');
+        hamburger.classList.add('hidden');
+        close.classList.remove('hidden');
+      }
+    }
+
+    document.getElementById('mobileMenuBtn').addEventListener('click', toggleMobileMenu);
+
+    // Project Case Study Details Data
+    const projectDetails = {
+      nexusrag: {
+        category: "DISTRIBUTED AI & RAG ARCHITECTURE",
+        title: "NexusRAG: Distributed Enterprise Knowledge Agent",
+        github: "https://github.com/alexrivera/nexus-rag-engine",
+        content: `
+          <div class="space-y-4">
+            <div>
+              <h4 class="text-white font-semibold mb-1">1. The Problem</h4>
+              <p>Standard LLM deployments hallucinate or fail when querying dense, multi-thousand-page technical engineering documentation. Traditional dense embeddings alone fail on exact keyword lookups like part numbers, error codes, and unique identifiers.</p>
+            </div>
+            <div>
+              <h4 class="text-white font-semibold mb-1">2. Architecture & Technical Decisions</h4>
+              <p>Designed a hybrid search engine combining <strong>BM25 lexical search</strong> with <strong>dense vector HNSW indices</strong> inside PostgreSQL using the <strong>pgvector</strong> extension. Reciprocal Rank Fusion (RRF) recalculates semantic and lexical weights dynamically.</p>
+              <div class="p-3 bg-surface-canvas rounded border border-surface-border font-mono text-xs text-gray-300 mt-2">
+                Client Request → FastAPI Gateway → Hybrid Vector + Lexical Search (pgvector) → Citation Extractor → Claude/OpenAI SSE Stream → Client
+              </div>
+            </div>
+            <div>
+              <h4 class="text-white font-semibold mb-1">3. Key Engineering Challenges</h4>
+              <ul class="list-disc list-inside space-y-1">
+                <li><strong>Latency Spikes:</strong> Fixed by implementing token caching with Redis and async chunk parallelization via Celery.</li>
+                <li><strong>Context Window Saturation:</strong> Implemented sliding window semantic chunking with 15% overlap and token budgeting.</li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="text-white font-semibold mb-1">4. Tech Stack</h4>
+              <p class="font-mono text-xs text-brand-400">Python 3.11, FastAPI, PostgreSQL + pgvector, LangChain, Redis, Docker, Server-Sent Events</p>
+            </div>
+          </div>
+        `
+      },
+      jobqueue: {
+        category: "DISTRIBUTED SYSTEMS & CONCURRENCY",
+        title: "KiteQueue: Distributed Task & Worker Engine",
+        github: "https://github.com/alexrivera/kite-queue-go",
+        content: `
+          <div class="space-y-4">
+            <div>
+              <h4 class="text-white font-semibold mb-1">1. The Problem</h4>
+              <p>Heavy background workloads (such as image transformation, email batching, and analytics aggregations) need reliable asynchronous dispatching without dropping messages when individual compute workers crash.</p>
+            </div>
+            <div>
+              <h4 class="text-white font-semibold mb-1">2. Architecture & Technical Decisions</h4>
+              <p>Built a Golang-based distributed task manager using Redis streams and sorted sets. Employed atomic Lua scripts for queue popping to prevent race conditions across parallel worker instances.</p>
+            </div>
+            <div>
+              <h4 class="text-white font-semibold mb-1">3. Concurrency Highlights</h4>
+              <ul class="list-disc list-inside space-y-1">
+                <li><strong>At-Least-Once Delivery:</strong> Heartbeat mechanisms track active worker goroutines. If a heartbeat expires, the unacknowledged job is automatically recycled.</li>
+                <li><strong>Dead Letter Queue (DLQ):</strong> Exponential backoff with jitter prevents thundering herd problems on failing third-party APIs.</li>
+                <li><strong>Throughput:</strong> Benchmark tests verified sustained throughput of 50,000 tasks/second on moderate hardware.</li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="text-white font-semibold mb-1">4. Tech Stack</h4>
+              <p class="font-mono text-xs text-brand-400">Go (Golang 1.22), Redis 7, gRPC, Protocol Buffers, Docker</p>
+            </div>
+          </div>
+        `
+      },
+      apigateway: {
+        category: "FULL-STACK PLATFORM & DEVELOPER TOOLS",
+        title: "PulseAPI: Schema Breaking-Change Monitor",
+        github: "https://github.com/alexrivera/pulse-api-monitor",
+        content: `
+          <div class="space-y-4">
+            <div>
+              <h4 class="text-white font-semibold mb-1">1. The Problem</h4>
+              <p>Fast-moving engineering teams frequently introduce unintended breaking API changes in staging and production environments, leading to runtime failures across frontend and mobile apps.</p>
+            </div>
+            <div>
+              <h4 class="text-white font-semibold mb-1">2. Implementation</h4>
+              <p>Created an automated SaaS monitor in React, Node.js, and TypeScript that ingests OpenAPI (Swagger) specifications on each commit. Computes structural AST diffs to identify missing fields, type mutations, and modified authentication parameters.</p>
+            </div>
+            <div>
+              <h4 class="text-white font-semibold mb-1">3. Technical Features</h4>
+              <ul class="list-disc list-inside space-y-1">
+                <li>Interactive visual diff tree with side-by-side highlighting.</li>
+                <li>Multi-tenant organizational accounts with granular API token generation.</li>
+                <li>Slack and Discord automated webhook integrations.</li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="text-white font-semibold mb-1">4. Tech Stack</h4>
+              <p class="font-mono text-xs text-brand-400">TypeScript, React, Node.js, Express, PostgreSQL, Tailwind CSS, Jest</p>
+            </div>
+          </div>
+        `
+      },
+      vectoreval: {
+        category: "AI INFRASTRUCTURE & BENCHMARKING",
+        title: "VectorBench: Embedding Model Profiler",
+        github: "https://github.com/alexrivera/vector-bench-profiler",
+        content: `
+          <div class="space-y-4">
+            <div>
+              <h4 class="text-white font-semibold mb-1">1. The Problem</h4>
+              <p>AI engineering teams often select embedding models purely based on leaderboards without profiling the severe latency, memory footprint, and dimension count costs on real production search workloads.</p>
+            </div>
+            <div>
+              <h4 class="text-white font-semibold mb-1">2. Implementation</h4>
+              <p>Built an automated Python evaluation framework testing Cosine vs Inner Product distance metrics across 8 embedding models (OpenAI, Voyage, BGE, and MiniLM) on synthetic and domain-specific corpora.</p>
+            </div>
+            <div>
+              <h4 class="text-white font-semibold mb-1">3. Tech Stack</h4>
+              <p class="font-mono text-xs text-brand-400">Python 3.10, PyTorch, ChromaDB, Matplotlib/Seaborn, FastAPI</p>
+            </div>
+          </div>
+        `
+      }
+    };
+
+    function openProjectModal(projectId) {
+      const data = projectDetails[projectId];
+      if (!data) return;
+
+      document.getElementById('modalCategory').innerText = data.category;
+      document.getElementById('modalTitle').innerText = data.title;
+      document.getElementById('modalContent').innerHTML = data.content;
+      document.getElementById('modalGithubLink').href = data.github;
+
+      const modal = document.getElementById('projectModal');
+      modal.classList.remove('hidden');
+      document.body.classList.add('modal-open');
+    }
+
+    function closeProjectModal() {
+      const modal = document.getElementById('projectModal');
+      modal.classList.add('hidden');
+      document.body.classList.remove('modal-open');
+    }
+
+    // Resume Modal Functions
+    function openResumeModal() {
+      const modal = document.getElementById('resumeModal');
+      modal.classList.remove('hidden');
+      document.body.classList.add('modal-open');
+    }
+
+    function closeResumeModal() {
+      const modal = document.getElementById('resumeModal');
+      modal.classList.add('hidden');
+      document.body.classList.remove('modal-open');
+    }
+
+    function downloadResumeNotice() {
+      alert("Resume PDF download initiated. In production, this links directly to the hosted static Alex_Rivera_Resume.pdf artifact.");
+    }
+
+    // Close modals on Esc or backdrop click
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeProjectModal();
+        closeResumeModal();
+      }
+    });
+
+    document.getElementById('projectModal').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('projectModal')) {
+        closeProjectModal();
+      }
+    });
+
+    document.getElementById('resumeModal').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('resumeModal')) {
+        closeResumeModal();
+      }
+    });
+
+    // Contact Form handling with feedback
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const feedback = document.getElementById('formFeedback');
+      const submitBtn = document.getElementById('submitBtn');
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `
+        <svg class="animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span>Sending...</span>
+      `;
+
+      setTimeout(() => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<span>Sent Successfully</span>`;
+        submitBtn.classList.remove('bg-brand-600', 'hover:bg-brand-500');
+        submitBtn.classList.add('bg-emerald-600');
+        feedback.classList.remove('hidden');
+        document.getElementById('contactForm').reset();
+      }, 700);
+    }
+  </script>
+</body>
+</html>
