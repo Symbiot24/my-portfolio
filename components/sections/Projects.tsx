@@ -4,7 +4,7 @@ import { projects } from "@/lib/constants";
 export const Projects: React.FC<{ onOpenProject: (id: string) => void }> = ({ onOpenProject }) => {
   return (
     <section id="projects" className="py-16 md:py-20 border-b border-border">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-2">
         {/* Section Header */}
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">

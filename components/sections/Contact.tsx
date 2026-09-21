@@ -20,7 +20,7 @@ export const Contact: React.FC = () => {
 
   return (
     <section id="contact" className="py-16 md:py-20 border-b border-border">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-2">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
           {/* Left Direct Links */}
           <div className="lg:col-span-5 space-y-6">

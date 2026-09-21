@@ -20,19 +20,19 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   return (
     <header className="sticky top-0 z-40 w-full backdrop-blur-md border-b transition-colors duration-200">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-2 h-16 flex items-center justify-between">
         {/* Logo / Name */}
         <div className="flex items-center gap-3">
           <a href="#hero" className="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-accent rounded-md p-1">
             <span className="w-8 h-8 rounded border border-border bg-bg-card flex items-center justify-center font-mono font-bold text-sm text-accent group-hover:border-accent transition-colors">
-              AR
+              UB
             </span>
             <div className="flex flex-col">
               <span className="text-sm font-semibold tracking-tight transition-colors group-hover:text-accent">
-                Alex Rivera
+                Utkarsh Bhariya
               </span>
               <span className="text-[11px] font-mono leading-none text-text-muted">
-                cs.dev // b.tech&apos;25
+                B.Tech&apos;26
               </span>
             </div>
           </a>
@@ -49,21 +49,6 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Actions & View Switcher */}
         <div className="flex items-center gap-2 sm:gap-3">
-          {/* Theme Switcher */}
-          <div className="flex items-center rounded-lg border border-opacity-40 p-0.5 text-xs font-mono">
-            <button
-              onClick={onToggleTheme}
-              className={`px-2 py-1 rounded-md transition-all flex items-center gap-1 ${
-                theme === "dark" ? "bg-accent text-white font-semibold shadow-sm" : "text-text-muted hover:text-text-primary"
-              }`}
-              title="Toggle Theme"
-            >
-              <span className="material-symbols-outlined text-xs">
-                {theme === "dark" ? "light_mode" : "dark_mode"}
-              </span>
-              <span className="hidden sm:inline">{theme === "dark" ? "Light" : "Dark"}</span>
-            </button>
-          </div>
 
           {/* Resume CTA */}
           <button 
@@ -80,6 +65,22 @@ export const Header: React.FC<HeaderProps> = ({
           >
             Hire / Contact
           </a>
+
+          {/* Theme Switcher */}
+          <div className="flex items-center rounded-lg border border-opacity-40 p-0.5 text-xs font-mono">
+            <button
+              onClick={onToggleTheme}
+              className={`px-2 py-1 rounded-md transition-all flex items-center gap-1 ${
+                theme === "dark" ? "bg-accent text-white font-semibold shadow-sm" : "text-text-muted hover:text-text-primary"
+              }`}
+              title="Toggle Theme"
+            >
+              <span className="material-symbols-outlined text-xs">
+                {theme === "dark" ? "light_mode" : "dark_mode"}
+              </span>
+              <span className="hidden sm:inline">{theme === "dark" ? "Light" : "Dark"}</span>
+            </button>
+          </div>
 
           {/* Mobile Drawer Button */}
           <button 

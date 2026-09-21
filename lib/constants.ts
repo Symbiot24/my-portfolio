@@ -10,29 +10,29 @@ export const navLinks: NavLink[] = [
 ];
 
 export const socialLinks: SocialLink[] = [
-  { href: "https://github.com/alexrivera", label: "github.com/alexrivera", icon: "github" },
-  { href: "https://linkedin.com/in/alexrivera-cs", label: "linkedin.com/in/alexrivera-cs", icon: "linkedin" },
-  { href: "mailto:alex.rivera.dev@gmail.com", label: "alex.rivera.dev@gmail.com", icon: "email" },
+  { href: "https://github.com/Symbiot24", label: "github.com/Symbiot24", icon: "github" },
+  { href: "https://linkedin.com/in/utkarsh-bhariya-2a8b08263/", label: "linkedin.com/in/utkarsh-bhariya", icon: "linkedin" },
+  { href: "mailto:bhariyashivam@gmail.com", label: "bhariyashivam@gmail.com", icon: "email" },
 ];
 
 export const contactLinks: ContactLink[] = [
   {
     label: "Email",
-    href: "mailto:alex.rivera.dev@gmail.com",
+    href: "mailto:bhariyashivam@gmail.com",
     icon: "mail",
-    description: "alex.rivera.dev@gmail.com",
+    description: "bhariyashivam@gmail.com",
   },
   {
     label: "LinkedIn",
-    href: "https://linkedin.com/in/alexrivera-cs",
+    href: "https://www.linkedin.com/in/utkarsh-bhariya-2a8b08263/",
     icon: "linkedin",
-    description: "linkedin.com/in/alexrivera-cs",
+    description: "https://linkedin.com/in/utkarsh-bhariya-2a8b08263/",
   },
   {
     label: "GitHub",
-    href: "https://github.com/alexrivera",
+    href: "https://github.com/Symbiot24",
     icon: "github",
-    description: "github.com/alexrivera",
+    description: "github.com/Symbiot24",
   },
 ];
 
@@ -40,45 +40,18 @@ export const experienceItems: ExperienceItem[] = [
   {
     id: "scalecloud",
     title: "Software Engineering Intern",
-    company: "ScaleCloud Infrastructure Labs",
-    location: "San Francisco, CA",
-    period: "June 2024 — August 2024",
+    company: "Wyreflow Technologies",
+    location: "Bhopal, M.P",
+    period: "December 2024 — February 2025",
     highlights: [
       "Designed and deployed an automated telemetry ingestion microservice in Go and PostgreSQL processing over 1.2 million log events/day from edge nodes.",
       "Optimized SQL analytical queries by indexing partition tables and restructuring joining logic, decreasing 95th percentile dashboard query latency from 840ms to 92ms.",
       "Engineered robust rate-limiting middleware using Redis token bucket algorithms to protect internal endpoints against denial-of-service traffic spikes.",
       "Authored comprehensive unit and integration test suites with 89% coverage and integrated them into GitHub Actions CI/CD pipelines.",
     ],
-    technologies: ["Go", "PostgreSQL", "Redis", "Docker", "GitHub Actions"],
+    technologies: ["React", "HTML", "CSS", "Bootstrap", "Tailwind", "GitHub"],
     type: "internship",
-  },
-  {
-    id: "vanguard",
-    title: "Full-Stack Developer Intern",
-    company: "Vanguard Financial Analytics",
-    location: "Remote",
-    period: "June 2023 — August 2023",
-    highlights: [
-      "Built client-facing portfolio rebalancing views using React, TypeScript, and Tailwind CSS, serving 14,000+ active retail investors.",
-      "Integrated RESTful microservices with Node.js / Express and structured JWT-based role-based access control (RBAC) with strict CSRF protection.",
-      "Collaborated with senior QA and product managers to resolve 40+ high-priority frontend regression tickets prior to the Q3 production release.",
-    ],
-    technologies: ["TypeScript", "React", "Node.js", "Express", "REST APIs"],
-    type: "internship",
-  },
-  {
-    id: "ta-csu",
-    title: "Undergraduate Teaching Assistant: Data Structures & Algorithms",
-    company: "Department of Computer Science • CSU",
-    location: "",
-    period: "January 2024 — May 2024",
-    highlights: [
-      "Led weekly discussion labs and office hours for 85+ students, explaining graph traversals (BFS/DFS, Dijkstra), tree rebalancing, and asymptotic runtime complexity.",
-      "Authored automated autograding scripts in Python to evaluate student submissions for algorithmic correctness and memory safety.",
-    ],
-    technologies: ["Python", "Data Structures", "Algorithms"],
-    type: "teaching",
-  },
+  }
 ];
 
 export const projects: Project[] = [
@@ -239,43 +212,43 @@ export const skillCategories: SkillCategory[] = [
 
 export const educationItems: EducationItem[] = [
   {
-    degree: "B.S. in Computer Science",
-    institution: "California State University, Long Beach",
-    location: "",
-    period: "Expected May 2025",
-    gpa: "3.91/4.00 (Dean's Honor List)",
+    degree: "B.Tech in Computer Science",
+    institution: "University Institute of Technology",
+    location: "Bhopal",
+    period: "2022 - 2026",
+    gpa: "7.2/10",
     honors: [],
     coursework: [
-      "Distributed Systems",
+      "Object-Oriented Programming",
       "Operating Systems",
-      "Algorithms & Complexity",
-      "Database Systems",
+      "Data Structures and Algorithms",
+      "Database Management System",
       "Computer Networks",
     ],
   },
 ];
 
 export const heroData = {
-  name: "Alex Rivera",
+  name: "Utkarsh Bhariya",
   tagline: "Building reliable software, scalable backend APIs, and production AI-powered systems.",
-  description: "Final-year Computer Science Engineering student at California State University. Focused on engineering resilient distributed backends, robust full-stack web platforms, and retrieval-augmented (RAG) AI architectures using TypeScript, Python, PostgreSQL, and Go.",
+  description: "Under Graduate student from University Institute of Technology, Bhopal. Focused on engineering resilient distributed backends, robust full-stack web platforms, and retrieval-augmented (RAG) AI architectures using TypeScript, Python, PostgreSQL, and Go.",
   statusItems: [
-    { label: "Graduation", value: "May 2025 (B.S. CS, Honors)" },
+    { label: "Graduation", value: "May 2026 (B.Tech CSE)" },
     { label: "Target Roles", value: "SWE • Full-Stack • Backend • AI/ML" },
-    { label: "Primary Languages", value: "TypeScript, Python, Go, Java, SQL" },
-    { label: "Core Stack", value: "React, Node/FastAPI, Postgres, Docker" },
-    { label: "Location / Auth", value: "US Citizen • San Francisco / Remote" },
+    { label: "Primary Languages", value: "Java, SQL, JavaScript, Python" },
+    { label: "Core Stack", value: "React, Node/Express, Git, Docker, Postgres" },
+    { label: "Location", value: "Indian Citizen • Jabalpur, M.P / Remote" },
   ],
   systemMetrics: {
     load: "0.14",
     testCoverage: "88.4%",
-    readiness: "Ready for summer/fall 2025 full-time software engineering roles.",
+    readiness: "Ready for full-time software engineering roles.",
   },
 };
 
 export const credibilityStats = [
-  { label: "ACADEMIC", value: "B.S. CS '25 (3.9 GPA)" },
-  { label: "EXPERIENCE", value: "2 SWE Internships" },
+  { label: "ACADEMIC", value: "B.Tech CSE '26 (7.2 GPA)" },
+  { label: "EXPERIENCE", value: "1 SWE Internships" },
   { label: "PRODUCTION APPS", value: "100K+ Req/Day Handled" },
   { label: "SYSTEM FOCUS", value: "Distributed & RAG AI" },
 ];
@@ -283,14 +256,14 @@ export const credibilityStats = [
 export const aboutData = {
   headline: "Engineering with pragmatism, rigor, and depth.",
   paragraphs: [
-    "I am a software engineer graduating in May 2025 with hands-on experience building web systems that need to be both reliable under load and clean to maintain. Rather than viewing engineering solely as writing code, I treat it as designing end-to-end solutions that solve tangible business problems.",
-    "During my internships at cloud infrastructure and fintech companies, I owned production API endpoints, optimized complex database queries, and implemented LLM-driven pipelines with strict latency guarantees.",
+    "I am a software engineer graduated in May 2026 with hands-on experience building web systems that need to be both reliable under load and clean to maintain. Rather than viewing engineering solely as writing code, I treat it as designing end-to-end solutions that solve tangible business problems.",
+    "During my internship, Contributed to production-ready web applications, focusing on responsive UI development and team-based engineering.",
   ],
   coreDomains: [
-    "Distributed Backend Services",
+    "Frontend Architecture",
     "Full-Stack Web Platforms",
     "RAG & Vector Pipeline AI",
-    "Schema Design & Caching",
+    "Distributed Backend Services",
   ],
   values: [
     {

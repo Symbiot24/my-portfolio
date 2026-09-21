@@ -13,7 +13,7 @@ export const Hero: React.FC<HeroProps> = ({ onScrollToProjects }) => {
       {/* Grid Pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--border-subtle)_1px,transparent_1px),linear-gradient(to_bottom,var(--border-subtle)_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none opacity-40"></div>
       
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-2 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
           {/* Left Content */}
           <div className="lg:col-span-7 space-y-6">
@@ -79,13 +79,13 @@ export const Hero: React.FC<HeroProps> = ({ onScrollToProjects }) => {
 
           {/* Right Content - Terminal Card */}
           <div className="lg:col-span-5">
-            <div className="bg-bg-card border border-border rounded-lg p-5 sm:p-6 shadow-xl space-y-4">
+            <div className="bg-bg-card border border-border rounded-lg p-2 sm:p-6 shadow-xl space-y-4">
               <div className="flex items-center justify-between border-b border-border pb-3">
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-red-500/80"></span>
                   <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></span>
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
-                  <span className="text-xs font-mono text-text-muted ml-2">rivera_dev_env.sh</span>
+                  <span className="text-xs font-mono text-text-muted ml-2">utkarsh_bhariya.dev.sh</span>
                 </div>
                 <span className="text-[11px] font-mono text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-800/40">Status: Active</span>
               </div>

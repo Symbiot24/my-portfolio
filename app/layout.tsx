@@ -18,25 +18,25 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Alex Rivera | Software & Systems Engineer",
-  description: "Portfolio of Alex Rivera, Final-Year Computer Science Engineering student specializing in full-stack applications, scalable backend systems, and AI/ML integrations.",
+  title: "Utkarsh Bhariya | Software & Systems Engineer",
+  description: "Portfolio of Utkarsh Bhariya, Under Graduate Computer Science Engineering student specializing in full-stack applications, scalable backend systems, and AI/ML integrations.",
   keywords: ["Software Engineer", "Full-Stack Developer", "Backend Engineer", "AI/ML", "TypeScript", "Python", "Go", "React", "Next.js", "Portfolio"],
-  authors: [{ name: "Alex Rivera" }],
-  creator: "Alex Rivera",
-  publisher: "Alex Rivera",
+  authors: [{ name: "Utkarsh Bhariya" }],
+  creator: "Utkarsh Bhariya",
+  publisher: "Utkarsh Bhariya",
   robots: "index, follow",
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "https://alexrivera.dev",
-    title: "Alex Rivera | Software & Systems Engineer",
-    description: "Portfolio of Alex Rivera, Final-Year Computer Science Engineering student specializing in full-stack applications, scalable backend systems, and AI/ML integrations.",
-    siteName: "Alex Rivera Portfolio",
+    title: "Utkarsh Bhariya | Software & Systems Engineer",
+    description: "Portfolio of Utkarsh Bhariya, Under Graduate Computer Science Engineering student specializing in full-stack applications, scalable backend systems, and AI/ML integrations.",
+    siteName: "Utkarsh Bhariya Portfolio",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Alex Rivera | Software & Systems Engineer",
-    description: "Portfolio of Alex Rivera, Final-Year Computer Science Engineering student specializing in full-stack applications, scalable backend systems, and AI/ML integrations.",
+    title: "Utkarsh Bhariya | Software & Systems Engineer",
+    description: "Portfolio of Utkarsh Bhariya, Under Graduate Computer Science Engineering student specializing in full-stack applications, scalable backend systems, and AI/ML integrations.",
   },
   verification: {
     google: "google-site-verification-code",
@@ -67,6 +67,10 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+          rel="stylesheet"
+        />
       </head>
       <body className="min-h-full flex flex-col bg-bg-canvas text-text-primary">
         <ThemeProvider>{children}</ThemeProvider>
