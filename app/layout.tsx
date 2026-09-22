@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://alexrivera.dev",
+    url: "https://utkarshbhariya.vercel.app",
     title: "Utkarsh Bhariya | Software & Systems Engineer",
     description: "Portfolio of Utkarsh Bhariya, Under Graduate Computer Science Engineering student specializing in full-stack applications, scalable backend systems, and AI/ML integrations.",
     siteName: "Utkarsh Bhariya Portfolio",
