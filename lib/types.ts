@@ -34,8 +34,8 @@ export interface Project {
   architecture: string;
   challenges: string[];
   stack: string;
-  github: string;
-  demo: string;
+  github: string | null;
+  demo: string | null;
   featured?: boolean;
   metrics?: {
     label: string;

@@ -6,10 +6,10 @@ import { projects } from "@/lib/constants";
 type FilterCategory = "all" | "backend" | "aiml" | "fullstack";
 
 const filterConfig = {
-  all: { label: "All (7)", count: 7 },
-  backend: { label: "Backend & Distributed Systems (3)", count: 3 },
-  aiml: { label: "AI & Applied ML (2)", count: 2 },
-  fullstack: { label: "Full-Stack & DevTools (2)", count: 2 },
+  all: { label: "All"},
+  backend: { label: "Backend & Distributed Systems"},
+  aiml: { label: "AI & Applied ML"},
+  fullstack: { label: "Full-Stack & DevTools"},
 } as const;
 
 const categoryStyles = {
@@ -153,7 +153,7 @@ export const Projects: React.FC<{ onOpenProject: (id: string) => void }> = ({
                   <div className="flex items-center gap-2">
                     <a
                       className="px-3 py-1.5 text-xs font-mono rounded-lg bg-bg-card border border-border hover:border-text-primary text-text-secondary hover:text-text-primary transition-colors shadow-sm"
-                      href={project.github}
+                      href={project.github ?? undefined}
                       rel="noopener noreferrer"
                       target="_blank"
                     >
@@ -161,7 +161,7 @@ export const Projects: React.FC<{ onOpenProject: (id: string) => void }> = ({
                     </a>
                     <a
                       className="px-3 py-1.5 text-xs font-mono rounded-lg bg-accent/10 border border-accent/30 hover:border-accent text-accent font-medium transition-colors"
-                      href={project.demo}
+                      href={project.demo ?? undefined}
                       rel="noopener noreferrer"
                       target="_blank"
                     >
