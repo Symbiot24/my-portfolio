@@ -1,18 +1,16 @@
 "use client";
 
 import React from "react";
-import { navLinks } from "@/lib/constants";
+import { navLinks, heroData } from "@/lib/constants";
 
 interface MobileDrawerProps {
   isOpen: boolean;
   onClose: () => void;
-  onOpenResume: () => void;
 }
 
 export const MobileDrawer: React.FC<MobileDrawerProps> = ({ 
   isOpen, 
-  onClose, 
-  onOpenResume 
+  onClose 
 }) => {
   if (!isOpen) return null;
 
@@ -39,14 +37,18 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
 
           <div className="pt-4 border-t border-borderSubtle">
             <div className="flex items-center gap-2">
-              <button 
-                onClick={onOpenResume} 
+              <a 
+                href={heroData.resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={onClose}
                 className="flex-1 py-2 text-center text-xs font-mono font-medium border border-border rounded-lg"
               >
                 View Resume
-              </button>
+              </a>
               <a 
                 href="#contact" 
+                onClick={onClose}
                 className="flex-1 py-2 text-center text-xs font-mono font-medium rounded-lg bg-accent text-white"
               >
                 Hire / Contact

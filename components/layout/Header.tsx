@@ -1,12 +1,11 @@
 "use client";
 
 import React from "react";
-import { navLinks } from "@/lib/constants";
+import { navLinks, heroData } from "@/lib/constants";
 
 interface HeaderProps {
   theme: "dark" | "light";
   onToggleTheme: () => void;
-  onOpenResume: () => void;
   onMobileMenuToggle: (open: boolean) => void;
   mobileMenuOpen: boolean;
 }
@@ -14,7 +13,6 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({
   theme,
   onToggleTheme,
-  onOpenResume,
   onMobileMenuToggle,
   mobileMenuOpen,
 }) => {
@@ -51,13 +49,15 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="flex items-center gap-2 sm:gap-3">
 
           {/* Resume CTA */}
-          <button 
-            onClick={onOpenResume} 
+          <a 
+            href={heroData.resumeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
             className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium border transition-all shadow-sm bg-bg-card hover:bg-bg-card-hover text-text-muted hover:text-text-primary border-border"
           >
             <span className="material-symbols-outlined text-sm text-accent">description</span>
             <span>Resume.pdf</span>
-          </button>
+          </a>
 
           <a 
             href="#contact" 
@@ -103,12 +103,15 @@ export const Header: React.FC<HeaderProps> = ({
           </a>
         ))}
         <div className="pt-3 border-t border-border flex gap-2">
-          <button 
-            onClick={() => { onOpenResume(); onMobileMenuToggle(false); }}
+          <a 
+            href={heroData.resumeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => onMobileMenuToggle(false)}
             className="flex-1 py-2 text-center text-xs font-mono font-medium border border-border rounded-lg"
           >
             View Resume
-          </button>
+          </a>
           <a 
             href="#contact" 
             onClick={() => onMobileMenuToggle(false)} 

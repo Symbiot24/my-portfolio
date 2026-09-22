@@ -47,13 +47,15 @@ export const Hero: React.FC<HeroProps> = ({ onScrollToProjects }) => {
                 View Engineered Projects
                 <span className="material-symbols-outlined text-sm">arrow_downward</span>
               </button>
-              <button 
-                onClick={() => {}}
+              <a 
+                href={heroData.resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="px-5 py-2.5 rounded-lg border border-border hover:border-border-hover text-text-muted hover:text-text-primary bg-bg-card hover:bg-bg-card-hover text-sm font-medium transition-all inline-flex items-center gap-2 font-mono"
               >
                 <span className="material-symbols-outlined text-accent text-sm">description</span>
                 Read Resume / CV
-              </button>
+              </a>
             </div>
 
             {/* Secondary Links */}

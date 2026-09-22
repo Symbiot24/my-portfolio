@@ -12,14 +12,12 @@ import { Skills } from "@/components/sections/Skills";
 import { Education } from "@/components/sections/Education";
 import { Contact } from "@/components/sections/Contact";
 import { ProjectModal } from "@/components/projects/ProjectModal";
-import { ResumeModal } from "@/components/resume/ResumeModal";
 import { MobileDrawer } from "@/components/layout/MobileDrawer";
 import { useTheme } from "@/lib/theme-provider";
 
 export default function HomePage() {
   const { theme, toggleTheme } = useTheme();
   const [openProject, setOpenProject] = React.useState<string | null>(null);
-  const [openResume, setOpenResume] = React.useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   return (
@@ -28,7 +26,6 @@ export default function HomePage() {
       <Header
         theme={theme}
         onToggleTheme={toggleTheme}
-        onOpenResume={() => setOpenResume(true)}
         onMobileMenuToggle={setMobileMenuOpen}
         mobileMenuOpen={mobileMenuOpen}
       />
@@ -37,7 +34,6 @@ export default function HomePage() {
       <MobileDrawer
         isOpen={mobileMenuOpen}
         onClose={() => setMobileMenuOpen(false)}
-        onOpenResume={() => { setOpenResume(true); setMobileMenuOpen(false); }}
       />
 
       {/* Main Content */}
@@ -53,11 +49,10 @@ export default function HomePage() {
       </main>
 
       {/* Footer */}
-      <Footer onOpenResume={() => setOpenResume(true)} />
+      <Footer />
 
       {/* Modals */}
       <ProjectModal projectId={openProject} onClose={() => setOpenProject(null)} />
-      <ResumeModal isOpen={openResume} onClose={() => setOpenResume(false)} />
     </div>
   );
 }

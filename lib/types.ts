@@ -41,6 +41,8 @@ export interface Project {
     label: string;
     value: string;
   }[];
+  filterCategory?: "backend" | "aiml" | "fullstack";
+  highlightMetric?: string;
 }
 
 export interface SkillCategory {
