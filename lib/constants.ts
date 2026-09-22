@@ -12,13 +12,13 @@ export const navLinks: NavLink[] = [
 export const socialLinks: SocialLink[] = [
   { href: "https://github.com/Symbiot24", label: "github.com/Symbiot24", icon: "github" },
   { href: "https://linkedin.com/in/utkarsh-bhariya-2a8b08263/", label: "linkedin.com/in/utkarsh-bhariya", icon: "linkedin" },
-  { href: "mailto:bhariyashivam@gmail.com", label: "bhariyashivam@gmail.com", icon: "email" },
+  { href: "https://mail.google.com/mail/?view=cm&fs=1&to=bhariyashivam@gmail.com&su=Contact%20from%20Portfolio", label: "bhariyashivam@gmail.com", icon: "email" },
 ];
 
 export const contactLinks: ContactLink[] = [
   {
     label: "Email",
-    href: "mailto:bhariyashivam@gmail.com",
+    href: "https://mail.google.com/mail/?view=cm&fs=1&to=bhariyashivam@gmail.com&su=Contact%20from%20Portfolio",
     icon: "mail",
     description: "bhariyashivam@gmail.com",
   },
@@ -162,13 +162,10 @@ export const skillCategories: SkillCategory[] = [
     id: 1,
     name: "Languages",
     skills: [
-      "TypeScript",
-      "JavaScript (ES6+)",
-      "Python 3",
-      "Go (Golang)",
-      "Java (Spring)",
-      "SQL (ANSI/Postgres)",
-      "C++ (Academic)",
+      "Java",
+      "JavaScript",
+      "Python",
+      "SQL"
     ],
   },
   {
@@ -177,22 +174,27 @@ export const skillCategories: SkillCategory[] = [
     skills: [
       "Node.js",
       "Express.js",
-      "FastAPI",
-      "RESTful Architecture",
-      "gRPC & Protobuf",
-      "Server-Sent Events (SSE)",
-      "JWT / OAuth 2.0",
+      "REST APIs",
+      "JWT Authentication",
+      "PostgreSQL",
+      "MongoDB",
+      "Neon",
+      "API Integration"
+
     ],
   },
   {
     id: 3,
     name: "Databases & Caching",
     skills: [
-      "PostgreSQL (Relational/Indexes)",
-      "Redis (Pub/Sub & Caching)",
+      "PostgreSQL",
+      "MySQL",
       "MongoDB",
-      "pgvector",
-      "Prisma / Drizzle ORM",
+      "Neon",
+      "Database Design",
+      "SQL",
+      "Schema Design",
+      "Query Optimization",
       "ACID Transactions",
     ],
   },
@@ -212,12 +214,14 @@ export const skillCategories: SkillCategory[] = [
     id: 5,
     name: "Frontend Engineering",
     skills: [
-      "React 18",
-      "Next.js / SSR",
+      "React",
+      "Next.js",
+      "JavaScript",
       "Tailwind CSS",
       "Vite",
-      "Zustand / TanStack Query",
-      "Semantic & Accessible HTML (a11y)",
+      "Shadcn UI",
+      "React Router",
+      "Responsive Design"
     ],
   },
   {
@@ -226,10 +230,13 @@ export const skillCategories: SkillCategory[] = [
     skills: [
       "Git / GitHub Workflows",
       "Docker & Multi-stage Builds",
-      "Linux / Bash Scripting",
-      "AWS (S3, EC2, Lambda)",
-      "CI/CD GitHub Actions",
-      "Nginx Reverse Proxy",
+      "Postman",
+      "Vercel",
+      "Render",
+      "Northflank",
+      "GitHub Actions",
+      "REST API Testing",
+      "Environment Configuration"
     ],
   },
 ];
@@ -272,46 +279,46 @@ export const heroData = {
 };
 
 export const credibilityStats = [
-  { label: "ACADEMIC", value: "B.Tech CSE '26 (7.2 GPA)" },
-  { label: "EXPERIENCE", value: "1 SWE Internships" },
-  { label: "PRODUCTION APPS", value: "100K+ Req/Day Handled" },
-  { label: "SYSTEM FOCUS", value: "Distributed & RAG AI" },
+{ label: "ACADEMIC", value: "B.Tech CSE '26" },
+{ label: "EXPERIENCE", value: "1 SWE Internships" },
+{ label: "PRODUCTION APPS", value: "Deployed Full-Stack & AI Builds" },
+{ label: "SYSTEM FOCUS", value: "AI, Backend & RAG Systems" },
 ];
 
 export const aboutData = {
-  headline: "Engineering with pragmatism, rigor, and depth.",
+  headline: "Building practical software with clarity, curiosity, and engineering discipline.",
   paragraphs: [
-    "I am a software engineer graduated in May 2026 with hands-on experience building web systems that need to be both reliable under load and clean to maintain. Rather than viewing engineering solely as writing code, I treat it as designing end-to-end solutions that solve tangible business problems.",
-    "During my internship, Contributed to production-ready web applications, focusing on responsive UI development and team-based engineering.",
+    "I am an under-graduate Computer Science Engineering student focused on building practical software across AI, backend, and full-stack development. I enjoy taking an idea from its underlying problem to a working system—designing the APIs, data flow, authentication, AI integrations, and user experience that make the product actually useful.",
+    "Through internships and independent projects, I have worked with React, Node.js, Express.js, Python, FastAPI, Spring Boot, PostgreSQL, MongoDB, and modern AI APIs. My approach is simple: understand the fundamentals, build hands-on, learn from what breaks, and keep improving the system until the engineering decisions make sense."
   ],
   coreDomains: [
     "Frontend Architecture",
     "Full-Stack Web Platforms",
-    "RAG & Vector Pipeline AI",
+    "Database & System Architecture",
     "Distributed Backend Services",
   ],
   values: [
-    {
-      title: "Understand Foundations Over Black Boxes",
-      description: "I don't just import packages blindly; I examine how query planners work, how network protocols handle handshakes, and why memory leaks occur in Node/V8 runtimes.",
-      highlight: true,
-    },
-    {
-      title: "Resilience, Observability & Testing",
-      description: "Code isn't finished when it works on localhost. I structure codebases with unit/integration testing (Jest, PyTest), structured logging, and idempotent API contracts.",
-      highlight: false,
-    },
-    {
-      title: "Fast Feedback & Shippable Iteration",
-      description: "I favor building minimum viable architectures that deploy quickly, gather real metrics, and scale iteratively based on empirical bottlenecks rather than premature speculation.",
-      highlight: false,
-    },
-    {
-      title: "Empathetic Team Collaboration",
-      description: "Clear PR writeups, thorough documentation, constructive code reviews, and communicative asynchronous updates are non-negotiable standards in my workflow.",
-      highlight: false,
-    },
-  ],
+{
+title: "Understand Before Abstracting",
+description: "I prefer understanding the underlying flow before relying heavily on abstractions—whether that means tracing an API request, understanding how data moves through a system, or knowing what an AI pipeline is actually doing.",
+highlight: true,
+},
+{
+title: "Build for Real Use",
+description: "A project is more than a working demo. I focus on authentication, data persistence, validation, error handling, deployment, and maintainability so that what I build can function beyond localhost.",
+highlight: false,
+},
+{
+title: "Learn Through Implementation",
+description: "I learn best by building. When I encounter an unfamiliar technology, I combine documentation, experimentation, debugging, and hands-on implementation to turn the concept into something I can actually reason about.",
+highlight: false,
+},
+{
+title: "Keep Improving the System",
+description: "I value iterative engineering: ship a meaningful version, identify the real bottlenecks, understand what can be improved, and evolve the architecture based on evidence rather than unnecessary complexity.",
+highlight: false,
+},
+],
 };
 
 export const contactFormDefaults = {
