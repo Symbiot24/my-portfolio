@@ -144,8 +144,8 @@ export const projects: Project[] = [
     "Designing retrieval-backed responses grounded in uploaded documents",
   ],
   stack: "Python, FastAPI, React, PostgreSQL, Neon, RAG, Embeddings",
-  github: null,
-  demo: null,
+  github: "",
+  demo: "",
   featured: true,
   metrics: [
     { label: "Architecture", value: "RAG Pipeline" },

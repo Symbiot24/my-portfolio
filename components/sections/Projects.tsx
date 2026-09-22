@@ -153,7 +153,7 @@ export const Projects: React.FC<{ onOpenProject: (id: string) => void }> = ({
                   <div className="flex items-center gap-2">
                     <a
                       className="px-3 py-1.5 text-xs font-mono rounded-lg bg-bg-card border border-border hover:border-text-primary text-text-secondary hover:text-text-primary transition-colors shadow-sm"
-                      href={project.github ?? undefined}
+                      href={project.github}
                       rel="noopener noreferrer"
                       target="_blank"
                     >
@@ -161,7 +161,7 @@ export const Projects: React.FC<{ onOpenProject: (id: string) => void }> = ({
                     </a>
                     <a
                       className="px-3 py-1.5 text-xs font-mono rounded-lg bg-accent/10 border border-accent/30 hover:border-accent text-accent font-medium transition-colors"
-                      href={project.demo ?? undefined}
+                      href={project.demo}
                       rel="noopener noreferrer"
                       target="_blank"
                     >
