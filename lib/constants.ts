@@ -38,20 +38,28 @@ export const contactLinks: ContactLink[] = [
 
 export const experienceItems: ExperienceItem[] = [
   {
-    id: "scalecloud",
-    title: "Software Engineering Intern",
+    id: "wyreflow",
+    title: "Frontend Developer Intern",
     company: "Wyreflow Technologies",
-    location: "Bhopal, M.P",
+    location: "Bhopal, M.P.",
     period: "December 2024 — February 2025",
     highlights: [
-      "Designed and deployed an automated telemetry ingestion microservice in Go and PostgreSQL processing over 1.2 million log events/day from edge nodes.",
-      "Optimized SQL analytical queries by indexing partition tables and restructuring joining logic, decreasing 95th percentile dashboard query latency from 840ms to 92ms.",
-      "Engineered robust rate-limiting middleware using Redis token bucket algorithms to protect internal endpoints against denial-of-service traffic spikes.",
-      "Authored comprehensive unit and integration test suites with 89% coverage and integrated them into GitHub Actions CI/CD pipelines.",
+      "Developed an online test portal and administrative dashboard based on Figma designs using React and Tailwind CSS.",
+      "Built reusable and responsive UI components while maintaining consistent layouts and user interactions across the application.",
+      "Collaborated with developers using Git and GitHub, contributing to feature development, debugging, and code integration.",
+      "Worked with backend APIs and Express.js to integrate frontend functionality with application data and workflows.",
     ],
-    technologies: ["React", "HTML", "CSS", "Bootstrap", "Tailwind", "GitHub"],
+    technologies: [
+      "React",
+      "Tailwind CSS",
+      "Express.js",
+      "HTML",
+      "CSS",
+      "Git",
+      "GitHub",
+    ],
     type: "internship",
-  }
+  },
 ];
 
 export const projects: Project[] = [
